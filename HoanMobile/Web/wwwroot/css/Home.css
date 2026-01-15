@@ -21,14 +21,18 @@ body {
 
 /* Hero Section */
 .hero {
-    min-height: 90vh;
+    width: 100%;
+    min-height: 71vh;
     display: flex;
-    align-items: end;
+    align-items: flex-end;
     justify-content: center;
     text-align: center;
     position: relative;
-    background: url("/img/banner_1.jpg");
     overflow: hidden;
+    background-image: url("/img/banner_1.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover; /* 🔥 QUAN TRỌNG */
 }
 
     .hero::before {
