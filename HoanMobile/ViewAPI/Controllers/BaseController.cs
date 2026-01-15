@@ -111,10 +111,10 @@ namespace API.Controllers
             await _repository.Delete(id);
             return Ok();
         }
-        [HttpGet("GenerateMonAnId")]
+        [HttpGet("GenerateId")]
         public async Task<ActionResult<string>> GenerateMonAnId()
         {
-            var id = await _xulyId.GenerateIdAsync("MA", _context.monAns, "Id");
+            var id = await _xulyId.GenerateIdAsync("MB", _context.products, "Id");
             return Ok(id);
         }
 

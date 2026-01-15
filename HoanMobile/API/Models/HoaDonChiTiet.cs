@@ -13,10 +13,10 @@ namespace API.Models
         [Range(1, (double)decimal.MaxValue, ErrorMessage = "Số tiền phải lớn hơn 0")]
         public decimal ThanhTien { get; set; }
         public string HoaDonId { get; set; }
-        public Guid? ChiTietMonAnId { get; set; }
+        public Guid? ChiTietProductId { get; set; }
         public string? ComboId { get; set; }
         public virtual Combo Combo { get; set; }
-        public virtual ChiTietProduct ChiTietMonAn { get; set; }    
+        public virtual ChiTietProduct ChiTietProduct { get; set; }    
         public virtual HoaDon HoaDon { get; set; }
         [JsonIgnore]
         public virtual ICollection<LichSuTrangThai> lichSuTrangThais { get; set; }

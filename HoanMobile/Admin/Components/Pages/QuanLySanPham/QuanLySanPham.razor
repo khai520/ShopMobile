@@ -8,8 +8,8 @@
 <PageTitle>Quản lý sản phẩm</PageTitle>
 <div class="container">
     <div class="header">
-        <h1><i class="fas fa-utensils"></i> Quản lý Sản phẩm</h1>
-        <p>Hệ thống quản lý món ăn và chi tiết sản phẩm</p>
+        <h1> Quản lý Sản phẩm</h1>
+        <p>Hệ thống quản lý sản phẩm và chi tiết sản phẩm</p>
     </div>
 
     <div class="controls">
@@ -63,11 +63,11 @@
                             </div>
                             <div class="detail-item">
                                 <i class="fas fa-star"></i>
-                                <span>@(product?.ThuongHieu ?? "Chưa có")</span>
+                                <span>@(product?.NhaXuatBan ?? "Chưa có")</span>
                             </div>
                             <div class="detail-item">
                                 <i class="fas fa-star"></i>
-                                <span>@(product?.TheLoai ?? "Chưa có")</span>
+                                <span>@(product?.TacGia ?? "Chưa có")</span>
                             </div>
                         </div>
                         <p class="product-description">@(product.Mota ?? "Không có mô tả")</p>
@@ -238,12 +238,12 @@
 
     private async Task AddProduct()
     {
-        nav.NavigateTo("/them-mon-an");
+        nav.NavigateTo("/product");
     }
 
     private async Task ViewProduct(string id)
     {
-        nav.NavigateTo($"/mon-an/{id}");
+        nav.NavigateTo($"/product/{id}");
     }
 
 

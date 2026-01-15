@@ -7,7 +7,7 @@
         public string? DuongDan { get; set; }
         public bool? TrangThai { get; set; }
         public Guid? NguoiDungId { get; set; }
-        public Guid? ChiTietMonAnId { get; set; }
+        public Guid? ChiTietProductId { get; set; }
 
 
     }

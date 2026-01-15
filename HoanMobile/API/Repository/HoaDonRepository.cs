@@ -52,7 +52,7 @@ namespace API.Repository
         {
             var data = await _context.trangThais
                 .Include(x => x.HoaDonChiTiet)
-                .ThenInclude(ct => ct.ChiTietMonAn)
+                .ThenInclude(ct => ct.ChiTietProduct)
                 .Where(x => x.HoaDonChiTiet.HoaDonId == hoaDonId)
                 .OrderByDescending(x => x.ThoiGian)
                 .ToListAsync();

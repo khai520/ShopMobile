@@ -20,7 +20,7 @@
                     <DataAnnotationsValidator />
             
                     <div class="space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4"
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">
@@ -170,7 +170,7 @@
     private Voucher formData = new();
     private string discountType = "percentage";
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
         if (Voucher != null)
         {
@@ -195,19 +195,19 @@
         {
             formData = new Voucher
             {
-                Ten = string.Empty,
+                Ten = "",
                 Soluong = 1,
-                SoTienKhuyenMai = 0,
                 PhanTramKhuyenMai = 1,
                 SoTienToiThieu = 0,
                 NgayBatDau = DateTime.Today,
                 NgayKetThuc = DateTime.Today,
-                MoTa = string.Empty,
-                ApDungSanPham = false,
                 TrangThai = true
             };
+
+            discountType = "percentage";
         }
     }
+
 
 
 

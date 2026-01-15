@@ -10,21 +10,26 @@
 <div class="container">
     <div class="header">
         <h1>🏷️ Quản lý Danh mục</h1>
-        <p>Quản lý bộ nhớ trong, kích cỡ, nhà cung cấp và chất liệu</p>
     </div>
 
     <div class="tabs">
-        <button class="tab @(currentTab == "bonhotrong" ? "active" : "")" @onclick='() => SwitchTab("bonhotrong")'>
-            🏷️ Bộ nhớ trong
+        <button class="tab @(currentTab == "Màu Sắc" ? "active" : "")" @onclick='() => SwitchTab("Màu Sắc")'>
+            🏷️ Thể loại
         </button>
-        <button class="tab @(currentTab == "kichco" ? "active" : "")" @onclick='() => SwitchTab("kichco")'>
+        <button class="tab @(currentTab == "Bộ Nhớ Trong" ? "active" : "")" @onclick='() => SwitchTab("Bộ Nhớ Trong")'>
             🏢 Kích cỡ
         </button>
-        <button class="tab @(currentTab == "nhacungcap" ? "active" : "")" @onclick='() => SwitchTab("nhacungcap")'>
+        <button class="tab @(currentTab == "Nhà Cung Cấp" ? "active" : "")" @onclick='() => SwitchTab("Nhà Cung Cấp")'>
             🏭 Nhà cung cấp
         </button>
-        <button class="tab @(currentTab == "chatlieu" ? "active" : "")" @onclick='() => SwitchTab("chatlieu")'>
+        <button class="tab @(currentTab == "Chất Liệu" ? "active" : "")" @onclick='() => SwitchTab("Chất Liệu")'>
             📦 Chất liệu
+        </button>
+        <button class="tab @(currentTab == "Thể Loại" ? "active" : "")" @onclick='() => SwitchTab("Thể Loại")'>
+            📦 Tác Giả
+        </button>
+        <button class="tab @(currentTab == "Thương Hiệu" ? "active" : "")" @onclick='() => SwitchTab("Thương Hiệu")'>
+            📦 Nhà Xuất Bản
         </button>
     </div>
 
@@ -42,22 +47,22 @@
         </div>
     }
 
-    <!-- Tab Bộ nhớ trong -->
-    <div class="tab-content @(currentTab == "bonhotrong" ? "active" : "")">
+
+    <div class="tab-content @(currentTab == "Màu Sắc" ? "active" : "")">
         <div class="stats-cards">
             <div class="stat-card">
-                <div class="stat-number">@BoNhoTrongList.Count</div>
-                <div class="stat-label">Tổng bộ nhớ trong</div>
+                <div class="stat-number">@MauSacList.Count</div>
+                <div class="stat-label">Tổng Màu sắc</div>
             </div>
         </div>
 
         <div class="management-header">
             <div class="search-box">
-                <input type="text" @bind="searchBoNhoTrong" @bind:event="oninput" placeholder="Tìm kiếm bộ nhớ trong..." />
-                <button class="btn btn-primary" @onclick='() => SearchData("bonhotrong")'>🔍 Tìm</button>
+                <input type="text" @bind="searchMauSac" @bind:event="oninput" placeholder="Tìm kiếm màu sắc..." />
+                <button class="btn btn-primary" @onclick='() => SearchData("Màu Sắc")'>🔍 Tìm</button>
             </div>
-            <button class="btn btn-success" @onclick='() => Them("bonhotrong", "add")'>
-                ➕ Thêm bộ nhớ trong
+            <button class="btn btn-success" @onclick='() => Them("Màu Sắc", "add")'>
+                ➕ Thêm màu sắc
             </button>
         </div>
 
@@ -67,6 +72,71 @@
                     <tr>
                         <th>STT</th>
                         <th>Tên vị</th>
+                        <th>Mô tả</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (filteredMauSac.Any())
+                    {
+                        @for (int i = 0; i < filteredMauSac.Count; i++)
+                        {
+                            var item = filteredMauSac[i];
+                            var index = i;
+                            <tr>
+                                <td>@(index + 1)</td>
+                                <td><strong>@item.Ten</strong></td>
+                                <td>@(string.IsNullOrWhiteSpace(item.Mota) ? "Chưa có mô tả" : item.Mota)</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-warning btn-sm" @onclick='() => EditItem("Màu Sắc", "sua", item.Id, item.Ten, item.Mota)'>
+                                            ✏️ Sửa
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="empty-state">
+                                <div class="empty-state-icon">📄</div>
+                                <h3>@(string.IsNullOrEmpty(searchMauSac) ? "Chưa có dữ liệu" : "Không tìm thấy kết quả")</h3>
+                                <p>@(string.IsNullOrEmpty(searchMauSac) ? "Nhấn nút \"Thêm\" để tạo thể loại mới" : "Thử lại với từ khóa khác")</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tab Thương hiệu -->
+    <div class="tab-content @(currentTab == "Bộ Nhớ Trong" ? "active" : "")">
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-number">@BoNhoTrongList.Count</div>
+                <div class="stat-label">Tổng thương hiệu</div>
+            </div>
+        </div>
+
+        <div class="management-header">
+            <div class="search-box">
+                <input type="text" @bind="searchBoNhoTrong" @bind:event="oninput" placeholder="Tìm kiếm thương hiệu..." />
+                <button class="btn btn-primary" @onclick='() => SearchData("Bộ Nhớ Trong")'>🔍 Tìm</button>
+            </div>
+            <button class="btn btn-success" @onclick='() => Them("Bộ Nhớ Trong", "add")'>
+                ➕ Thêm thương hiệu
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên kích cỡ</th>
                         <th>Mô tả</th>
                         <th>Thao tác</th>
                     </tr>
@@ -84,7 +154,7 @@
                                 <td>@(string.IsNullOrWhiteSpace(item.Mota) ? "Chưa có mô tả" : item.Mota)</td>
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="btn btn-warning btn-sm" @onclick='() => EditItem("bonhotrong", "sua", item.Id, item.Ten, item.Mota)'>
+                                        <button class="btn btn-warning btn-sm" @onclick='() => EditItem("Bộ Nhớ Trong", "sua", item.Id, item.Ten, item.Mota)'>
                                             ✏️ Sửa
                                         </button>
                                     </div>
@@ -98,72 +168,7 @@
                             <td colspan="4" class="empty-state">
                                 <div class="empty-state-icon">📄</div>
                                 <h3>@(string.IsNullOrEmpty(searchBoNhoTrong) ? "Chưa có dữ liệu" : "Không tìm thấy kết quả")</h3>
-                                <p>@(string.IsNullOrEmpty(searchBoNhoTrong) ? "Nhấn nút \"Thêm\" để tạo bộ nhớ trong mới" : "Thử lại với từ khóa khác")</p>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Tab Thương hiệu -->
-    <div class="tab-content @(currentTab == "kichco" ? "active" : "")">
-        <div class="stats-cards">
-            <div class="stat-card">
-                <div class="stat-number">@kichCoList.Count</div>
-                <div class="stat-label">Tổng thương hiệu</div>
-            </div>
-        </div>
-
-        <div class="management-header">
-            <div class="search-box">
-                <input type="text" @bind="searchKichCo" @bind:event="oninput" placeholder="Tìm kiếm thương hiệu..." />
-                <button class="btn btn-primary" @onclick='() => SearchData("kichco")'>🔍 Tìm</button>
-            </div>
-            <button class="btn btn-success" @onclick='() => Them("kichco", "add")'>
-                ➕ Thêm thương hiệu
-            </button>
-        </div>
-
-        <div class="table-container">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Tên kích cỡ</th>
-                        <th>Mô tả</th>
-                        <th>Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (filteredKichCo.Any())
-                    {
-                        @for (int i = 0; i < filteredKichCo.Count; i++)
-                        {
-                            var item = filteredKichCo[i];
-                            var index = i;
-                            <tr>
-                                <td>@(index + 1)</td>
-                                <td><strong>@item.Ten</strong></td>
-                                <td>@(string.IsNullOrWhiteSpace(item.Mota) ? "Chưa có mô tả" : item.Mota)</td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn btn-warning btn-sm" @onclick='() => EditItem("kichco", "sua", item.Id, item.Ten, item.Mota)'>
-                                            ✏️ Sửa
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="4" class="empty-state">
-                                <div class="empty-state-icon">📄</div>
-                                <h3>@(string.IsNullOrEmpty(searchKichCo) ? "Chưa có dữ liệu" : "Không tìm thấy kết quả")</h3>
-                                <p>@(string.IsNullOrEmpty(searchKichCo) ? "Nhấn nút \"Thêm\" để tạo thương hiệu mới" : "Thử lại với từ khóa khác")</p>
+                                <p>@(string.IsNullOrEmpty(searchBoNhoTrong) ? "Nhấn nút \"Thêm\" để tạo thương hiệu mới" : "Thử lại với từ khóa khác")</p>
                             </td>
                         </tr>
                     }
@@ -173,7 +178,7 @@
     </div>
 
     <!-- Tab Nhà cung cấp -->
-    <div class="tab-content @(currentTab == "nhacungcap" ? "active" : "")">
+    <div class="tab-content @(currentTab == "Nhà Cung Cấp" ? "active" : "")">
         <div class="stats-cards">
             <div class="stat-card">
                 <div class="stat-number">@nhaCungCapList.Count</div>
@@ -184,9 +189,9 @@
         <div class="management-header">
             <div class="search-box">
                 <input type="text" @bind="searchNhaCungCap" @bind:event="oninput" placeholder="Tìm kiếm nhà cung cấp..." />
-                <button class="btn btn-primary" @onclick='() => SearchData("nhacungcap")'>🔍 Tìm</button>
+                <button class="btn btn-primary" @onclick='() => SearchData("Nhà Cung Cấp")'>🔍 Tìm</button>
             </div>
-            <button class="btn btn-success" @onclick='() => Them("nhacungcap", "add")'>
+            <button class="btn btn-success" @onclick='() => Them("Nhà Cung Cấp", "add")'>
                 ➕ Thêm nhà cung cấp
             </button>
         </div>
@@ -214,7 +219,7 @@
                                 <td>@(string.IsNullOrWhiteSpace(item.Mota) ? "Chưa có mô tả" : item.Mota)</td>
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="btn btn-warning btn-sm" @onclick='() => EditItem("nhacungcap", "sua", item.Id, item.Ten, item.Mota )'>
+                                        <button class="btn btn-warning btn-sm" @onclick='() => EditItem("Nhà Cung Cấp", "sua", item.Id, item.Ten, item.Mota )'>
                                             ✏️ Sửa
                                         </button>
                                     </div>
@@ -238,20 +243,20 @@
     </div>
 
     <!-- Tab Chất liệu -->
-    <div class="tab-content @(currentTab == "chatlieu" ? "active" : "")">
+    <div class="tab-content @(currentTab == "Chất Liệu" ? "active" : "")">
         <div class="stats-cards">
             <div class="stat-card">
                 <div class="stat-number">@chatLieuList.Count</div>
-                <div class="stat-label">Tổng loại nguyên liệu</div>
+                <div class="stat-label">Tổng loại chất liệu</div>
             </div>
         </div>
 
         <div class="management-header">
             <div class="search-box">
                 <input type="text" @bind="searchChatLieu" @bind:event="oninput" placeholder="Tìm kiếm loại chất liệu..." />
-                <button class="btn btn-primary" @onclick='() => SearchData("chatlieu")'>🔍 Tìm</button>
+                <button class="btn btn-primary" @onclick='() => SearchData("Chất Liệu")'>🔍 Tìm</button>
             </div>
-            <button class="btn btn-success" @onclick='() => Them("chatlieu", "add")'>
+            <button class="btn btn-success" @onclick='() => Them("Chất Liệu", "add")'>
                 ➕ Thêm chất liệu
             </button>
         </div>
@@ -279,7 +284,7 @@
                                 <td>@(string.IsNullOrWhiteSpace(item.Mota) ? "Chưa có mô tả" : item.Mota)</td>
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="btn btn-warning btn-sm" @onclick='() => EditItem("chatlieu", "sua", item.Id, item.Ten, item.Mota)'>
+                                        <button class="btn btn-warning btn-sm" @onclick='() => EditItem("Chất Liệu", "sua", item.Id, item.Ten, item.Mota)'>
                                             ✏️ Sửa
                                         </button>
                                     </div>
@@ -294,6 +299,136 @@
                                 <div class="empty-state-icon">📄</div>
                                 <h3>@(string.IsNullOrEmpty(searchChatLieu) ? "Chưa có dữ liệu" : "Không tìm thấy kết quả")</h3>
                                 <p>@(string.IsNullOrEmpty(searchChatLieu) ? "Nhấn nút \"Thêm\" để tạo chất liệu mới" : "Thử lại với từ khóa khác")</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tab Tác giả -->
+    <div class="tab-content @(currentTab == "Thể Loại" ? "active" : "")">
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-number">@theLoaiList.Count</div>
+                <div class="stat-label">Tổng tác giả</div>
+            </div>
+        </div>
+
+        <div class="management-header">
+            <div class="search-box">
+                <input type="text" @bind="searchTheLoai" @bind:event="oninput" placeholder="Tìm kiếm loại tác giả..." />
+                <button class="btn btn-primary" @onclick='() => SearchData("Thể Loại")'>🔍 Tìm</button>
+            </div>
+            <button class="btn btn-success" @onclick='() => Them("Thể Loại", "add")'>
+                ➕ Thêm tác giả
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên loại tác giả</th>
+                        <th>Mô tả</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (filteredTheLoai.Any())
+                    {
+                        @for (int i = 0; i < filteredTheLoai.Count; i++)
+                        {
+                            var item = filteredTheLoai[i];
+                            var index = i;
+                            <tr>
+                                <td>@(index + 1)</td>
+                                <td><strong>@item.Ten</strong></td>
+                                <td>@(string.IsNullOrWhiteSpace(item.Mota) ? "Chưa có mô tả" : item.Mota)</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-warning btn-sm" @onclick='() => EditItem("Thể Loại", "sua", item.Id, item.Ten, item.Mota)'>
+                                            ✏️ Sửa
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="empty-state">
+                                <div class="empty-state-icon">📄</div>
+                                <h3>@(string.IsNullOrEmpty(searchTheLoai) ? "Chưa có dữ liệu" : "Không tìm thấy kết quả")</h3>
+                                <p>@(string.IsNullOrEmpty(searchTheLoai) ? "Nhấn nút \"Thêm\" để tạo chất liệu mới" : "Thử lại với từ khóa khác")</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div> 
+
+    <!-- Tab Nhà xuất bản -->
+    <div class="tab-content @(currentTab == "Thương Hiệu" ? "active" : "")">
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-number">@thuongHieuList.Count</div>
+                <div class="stat-label">Tổng loại nhà xuất bản</div>
+            </div>
+        </div>
+
+        <div class="management-header">
+            <div class="search-box">
+                <input type="text" @bind="searchThuongHieu" @bind:event="oninput" placeholder="Tìm kiếm loại nhà xuất bản..." />
+                <button class="btn btn-primary" @onclick='() => SearchData("Thương Hiệu")'>🔍 Tìm</button>
+            </div>
+            <button class="btn btn-success" @onclick='() => Them("Thương Hiệu", "add")'>
+                ➕ Thêm nhà xuất bản
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên loại nhà xuất bản</th>
+                        <th>Mô tả</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (filteredThuongHieu.Any())
+                    {
+                        @for (int i = 0; i < filteredThuongHieu.Count; i++)
+                        {
+                            var item = filteredThuongHieu[i];
+                            var index = i;
+                            <tr>
+                                <td>@(index + 1)</td>
+                                <td><strong>@item.Ten</strong></td>
+                                <td>@(string.IsNullOrWhiteSpace(item.Mota) ? "Chưa có mô tả" : item.Mota)</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-warning btn-sm" @onclick='() => EditItem("Thương Hiệu", "sua", item.Id, item.Ten, item.Mota)'>
+                                            ✏️ Sửa
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="empty-state">
+                                <div class="empty-state-icon">📄</div>
+                                <h3>@(string.IsNullOrEmpty(searchThuongHieu) ? "Chưa có dữ liệu" : "Không tìm thấy kết quả")</h3>
+                                <p>@(string.IsNullOrEmpty(searchThuongHieu) ? "Nhấn nút \"Thêm\" để tạo chất liệu mới" : "Thử lại với từ khóa khác")</p>
                             </td>
                         </tr>
                     }
@@ -331,21 +466,27 @@
 
 
 @code {
+    private List<MauSac> MauSacList = new();
     private List<BoNhoTrong> BoNhoTrongList = new();
-    private List<KichCo> kichCoList = new();
     private List<NhaCungCap> nhaCungCapList = new();
     private List<ChatLieu> chatLieuList = new();
+    private List<TheLoai> theLoaiList = new();
+    private List<ThuongHieu> thuongHieuList = new();
 
+    private List<MauSac> filteredMauSac = new();
     private List<BoNhoTrong> filteredBoNhoTrong = new();
-    private List<KichCo> filteredKichCo = new();
     private List<NhaCungCap> filteredNhaCungCap = new();
     private List<ChatLieu> filteredChatLieu = new();
+    private List<TheLoai> filteredTheLoai = new();
+    private List<ThuongHieu> filteredThuongHieu = new();
 
-    private string currentTab = "bonhotrong";
+    private string currentTab = "Màu Sắc";
+    private string searchMauSac = string.Empty;
     private string searchBoNhoTrong = string.Empty;
-    private string searchKichCo = string.Empty;
     private string searchNhaCungCap = string.Empty;
     private string searchChatLieu = string.Empty;
+    private string searchTheLoai = string.Empty;
+    private string searchThuongHieu = string.Empty;
 
     private bool showModal = false;
     private string modalTitle = "";
@@ -375,21 +516,29 @@
         {
             switch (tab)
             {
-                case "bonhotrong":
+                case "Màu Sắc":
+                    MauSacList = await apiService.GetAsync<List<MauSac>>("MauSac") ?? new();
+                    filteredMauSac = MauSacList;
+                    break;
+                case "Bộ Nhớ Trong":
                     BoNhoTrongList = await apiService.GetAsync<List<BoNhoTrong>>("BoNhoTrong") ?? new();
                     filteredBoNhoTrong = BoNhoTrongList;
                     break;
-                case "kichco":
-                    kichCoList = await apiService.GetAsync<List<KichCo>>("KichCo") ?? new();
-                    filteredKichCo = kichCoList;
-                    break;
-                case "nhacungcap":
+                case "Nhà Cung Cấp":
                     nhaCungCapList = await apiService.GetAsync<List<NhaCungCap>>("NhaCungCap") ?? new();
                     filteredNhaCungCap = nhaCungCapList;
                     break;
-                case "chatlieu":
+                case "Chất Liệu":
                     chatLieuList = await apiService.GetAsync<List<ChatLieu>>("ChatLieu") ?? new();
                     filteredChatLieu = chatLieuList;
+                    break;
+                case "Thể Loại":
+                    theLoaiList = await apiService.GetAsync<List<TheLoai>>("MauSac") ?? new();
+                    filteredTheLoai = theLoaiList;
+                    break;
+                case "Thương Hiệu":
+                    thuongHieuList = await apiService.GetAsync<List<ThuongHieu>>("ThuongHieu") ?? new();
+                    filteredThuongHieu = thuongHieuList;
                     break;
             }
         }
@@ -404,17 +553,23 @@
     {
         switch (tab)
         {
-            case "bonhotrong":
+            case "Màu Sắc":
+                filteredMauSac = MauSacList.Where(x => x.Ten.Contains(searchMauSac, StringComparison.OrdinalIgnoreCase)).ToList();
+                break;
+            case "Bộ Nhớ Trong":
                 filteredBoNhoTrong = BoNhoTrongList.Where(x => x.Ten.Contains(searchBoNhoTrong, StringComparison.OrdinalIgnoreCase)).ToList();
                 break;
-            case "thuonghieu":
-                filteredKichCo = kichCoList.Where(x => x.Ten.Contains(searchKichCo, StringComparison.OrdinalIgnoreCase)).ToList();
-                break;
-            case "nhacungcap":
+            case "Nhà Cung Cấp":
                 filteredNhaCungCap = nhaCungCapList.Where(x => x.Ten.Contains(searchNhaCungCap, StringComparison.OrdinalIgnoreCase)).ToList();
                 break;
-            case "chatlieu":
+            case "Chất Liệu":
                 filteredChatLieu = chatLieuList.Where(x => x.Ten.Contains(searchChatLieu, StringComparison.OrdinalIgnoreCase)).ToList();
+                break;
+            case "Thể Loại":
+                filteredTheLoai = theLoaiList.Where(x => x.Ten.Contains(searchTheLoai, StringComparison.OrdinalIgnoreCase)).ToList();
+                break;
+            case "Thương Hiệu":
+                filteredThuongHieu = thuongHieuList.Where(x => x.Ten.Contains(searchThuongHieu, StringComparison.OrdinalIgnoreCase)).ToList();
                 break;
         }
     }

@@ -18,11 +18,11 @@
             <i class="fas fa-arrow-left"></i> Quay lại
         </button>
 
-        <h1><i class="fas fa-utensils"></i> Chi Tiết Món Ăn</h1>
+        <h1><i class="fas fa-utensils"></i> Chi Tiết Sản Phẩm</h1>
         <p>Xem và chỉnh sửa thông tin chi tiết sản phẩm</p>
     </div>
 
-    @if (monAn == null)
+    @if (product == null)
     {
         <div class="loading">
             <i class="fas fa-spinner fa-spin"></i> Đang tải...
@@ -33,34 +33,49 @@
         <div class="content">
             <div class="product-overview">
                 <div class="product-image-section">
-                    <div class="product-image-placeholder" style="background:url('@monAn.AnhDaTai') no-repeat center; background-size: contain;">
-                        <div class="product-status @(monAn.TrangThai ? "status-active" : "status-inactive")">
-                            <i class="fas @(monAn.TrangThai ? "fa-check-circle" : "fa-times-circle")"></i>
-                            @(monAn.TrangThai ? "Đang bán" : "Ngừng bán")
+                    <div class="product-image-placeholder" style="background:url('@product.AnhDaTai') no-repeat center; background-size: contain;">
+                        <div class="product-status @(product.TrangThai ? "status-active" : "status-inactive")">
+                            <i class="fas @(product.TrangThai ? "fa-check-circle" : "fa-times-circle")"></i>
+                            @(product.TrangThai ? "Đang bán" : "Ngừng bán")
                         </div>
                     </div>
                 </div>
                 <div class="product-info-section">
                     @if (isEditMode)
                     {
-                        <EditForm Model="monAn" OnValidSubmit="SaveMonAn">
+                        <EditForm Model="product" OnValidSubmit="SaveMonAn">
                             <DataAnnotationsValidator />
                             <ValidationSummary />
 
                             <div class="form-group">
-                                <InputText @bind-Value="monAn.Ten" class="form-input product-title-input" placeholder="Tên món ăn" />
+                                <InputText @bind-Value="product.Ten" class="form-input product-title-input" placeholder="Tên món ăn" />
                             </div>
 
                             <div class="form-group">
                                 <div>
-                                    <label for="theloai">Thể loại</label>
+                                    <label for="theloai">Thể Loại</label>
                                     <div class="select-with-add row-layout ">
 
-                                        <InputSelect id="theloai" @bind-Value="monAn.TheLoaiId">
-                                            <option selected value="@Guid.Empty">-- Thể Loại --</option>
+                                        <InputSelect id="theloai" @bind-Value="product.TacGiaId">
+                                            @if(product.TacGia == null)
+                                            {
+                                                <option selected value="">-- Thể Loại --</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="">-- Thể Loại --</option>
+                                            }
+                                            
                                             @foreach (var item in theLoaisList)
                                             {
-                                                <option value="@item.Id">@item.Ten</option>
+                                                if (item.Id == product.TacGiaId)
+                                                {
+                                                    <option selected value="@item.Id">@item.Ten</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.Id">@item.Ten</option>
+                                                }
                                             }
                                         </InputSelect>
                                     </div>
@@ -71,49 +86,63 @@
                                     <label for="thuonghieu">Thương Hiệu</label>
                                     <div class="select-with-add row-layout ">
 
-                                        <InputSelect id="thuonghieu" @bind-Value="monAn.ThuongHieuId">
-                                            <option selected value="@Guid.Empty">-- Thương Hiệu --</option>
+                                        <InputSelect id="thuonghieu" @bind-Value="product.NhaXuatBanId">
+                                            @if (product.NhaXuatBan == null)
+                                            {
+                                                <option selected value="">-- Thương Hiệu --</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="">-- Thương Hiệu --</option>
+                                            }
                                             @foreach (var item in thuongHieusList)
                                             {
-                                                <option value="@item.Id">@item.Ten</option>
+                                                if (item.Id == product.NhaXuatBanId)
+                                                {
+                                                    <option selected value="@item.Id">@item.Ten</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.Id">@item.Ten</option>
+                                                }
                                             }
                                         </InputSelect>
                                     </div>
 
                                 </div>
                             </div>
-                            <div class="product-id">ID: <span>@monAn.Id</span></div>
+                            <div class="product-id">ID: <span>@product.Id</span></div>
 
                             <div class="form-group">
-                                <InputTextArea @bind-Value="monAn.Mota" class="form-textarea" placeholder="Mô tả món ăn" />
+                                <InputTextArea @bind-Value="product.Mota" class="form-textarea" placeholder="Mô tả món ăn" />
                             </div>
 
                             <div class="product-meta">
                                 <div class="meta-item">
                                     <i class="fas fa-toggle-on"></i>
-                                    <span>Trạng thái: <InputCheckbox @bind-Value="monAn.TrangThai" /> Đang bán</span>
+                                    <span>Trạng thái: <InputCheckbox @bind-Value="product.TrangThai" /> Đang bán</span>
                                 </div>
                             </div>
                         </EditForm>
                     }
                     else
                     {
-                        <div class="product-name">@monAn.Ten</div>
-                        <div class="product-id">ID: <span>@monAn.Id</span></div>
+                        <div class="product-name">@product.Ten</div>
+                        <div class="product-id">ID: <span>@product.Id</span></div>
                         <div class="product-brand">
-                            @monAn.ThuongHieu 
+                            @product.NhaXuatBan 
                         </div>
                         <div class="product-category">
-                            @monAn.TheLoai 
+                            @product.TacGia 
                         </div>
                         <div class="product-description">
-                            @monAn.Mota
+                            @product.Mota
                         </div>
 
                         <div class="product-meta">
                             <div class="meta-item">
                                 <i class="fas fa-toggle-on"></i>
-                                <span>Trạng thái: <span class="@(monAn.TrangThai ? "text-success" : "text-danger")">@(monAn.TrangThai ? "Đang bán" : "Ngừng bán")</span></span>
+                                <span>Trạng thái: <span class="@(product.TrangThai ? "text-success" : "text-danger")">@(product.TrangThai ? "Đang bán" : "Ngừng bán")</span></span>
                             </div>
                         </div>
                     }
@@ -135,7 +164,7 @@
             </div>
             <div class="product-details">
                 <div class="details-header">
-                    <h2><i class="fas fa-list"></i> Chi Tiết Món Ăn</h2>
+                    <h2><i class="fas fa-list"></i> Chi Tiết Sản Phẩm</h2>
                     <button class="btn btn-primary" @onclick="ShowAddDetailModal">
                         <i class="fas fa-plus"></i> Thêm chi tiết
                     </button>
@@ -171,19 +200,19 @@
                                 <div class="detail-content">
                                     <div class="detail-info">
                                         <div class="info-item">
-                                            <strong>Loại Vị:</strong>
-                                            <span>@(loaiViList.FirstOrDefault(x => x.Id == chiTiet.LoaiViId)?.Ten ?? "N/A")</span>
+                                            <strong>Màu Sắc:</strong>
+                                            <span>@(loaiViList.FirstOrDefault(x => x.Id == chiTiet.MauSacId)?.Ten ?? "N/A")</span>
                                         </div>
                                         <div class="info-item">
-                                            <strong>Kích Cỡ:</strong>
-                                            <span>@(kichCoList.FirstOrDefault(x => x.Id == chiTiet.KichCoId)?.Ten ?? "N/A")</span>
+                                            <strong>Bộ Nhớ Trong:</strong>
+                                            <span>@(kichCoList.FirstOrDefault(x => x.Id == chiTiet.BoNhoTrongId)?.Ten ?? "N/A")</span>
                                         </div>
                                         <div class="info-item">
                                             <strong>Nhà cung cấp:</strong>
-                                            <span>@(nhaCungCapList.FirstOrDefault(x => x.Id == chiTiet.BoNhoTrongId)?.Ten ?? "N/A")</span>
+                                            <span>@(nhaCungCapList.FirstOrDefault(x => x.Id == chiTiet.NhaCungCapId)?.Ten ?? "N/A")</span>
                                         </div>
                                         <div class="info-item">
-                                            <strong>Nguyên liệu:</strong>
+                                            <strong>Chất liệu:</strong>
                                             <span>@(dongGoiList.FirstOrDefault(x => x.Id == chiTiet.ChatLieuId)?.Ten ?? "N/A")</span>
                                         </div>
                                         <div class="info-item">
@@ -195,8 +224,8 @@
                                             <span class="quantity">@chiTiet.Gia</span>
                                         </div>
                                         <div class="info-item">
-                                            <strong>Số ngày sử dụng:</strong>
-                                            <span class="quantity">@chiTiet.SoNgayHSD ngày</span>
+                                            <strong>Số trang sách:</strong>
+                                            <span class="quantity">@chiTiet.SoTrang</span>
                                         </div>
                                         @if (!string.IsNullOrEmpty(chiTiet.Mota))
                                         {
@@ -240,13 +269,13 @@
     <div class="modal-overlay" @onclick="CloseDetailModal">
         <div class="modal-content" @onclick:stopPropagation="true">
             <div class="modal-header">
-                <h3>@(isEditingDetail ? "Chỉnh sửa" : "Thêm") Chi Tiết Món Ăn</h3>
+                <h3>@(isEditingDetail ? "Chỉnh sửa" : "Thêm") Chi Tiết Sản Phẩm</h3>
                 <button class="btn-close" @onclick="CloseDetailModal"></button>
             </div>
             <div class="modal-body">
-                <ThemChiTietMonAn
+                <ThemChiTietProduct
                     ChiTietMonAnSua="@editingChiTiet"
-                    MonAnId="@MonAnId"
+                    MonAnId="@ProductId"
                     ButtonText="@(isEditingDetail ? "Cập nhật" : "Thêm")"
                     ShowFileUpload="true"
                     ShowDescription="true"
@@ -276,20 +305,20 @@
 }
 
 @code {
-    [Parameter] public string MonAnId { get; set; } = "";
+    [Parameter] public string ProductId { get; set; } = "";
 
-    private ProductDTO? monAn;
-    private ProductDTO? originalMonAn;
-    private List<ChiTietMonAnDTO> danhSachChiTiet = new();
-    private List<ChiTietMonAnDTO> tempChiTietList = new();
+    private ProductDTO? product;
+    private ProductDTO? originalProduct;
+    private List<ChiTietProductDTO> danhSachChiTiet = new();
+    private List<ChiTietProductDTO> tempChiTietList = new();
     private bool isEditMode = false;
     private bool showDetailModal = false;
     private bool isEditingDetail = false;
-    private ChiTietMonAnDTO? editingChiTiet = new();
+    private ChiTietProductDTO? editingChiTiet = new();
 
 
-    private List<BoNhoTrong> loaiViList = new();
-    private List<KichCo> kichCoList = new();
+    private List<MauSac> loaiViList = new();
+    private List<BoNhoTrong> kichCoList = new();
     private List<NhaCungCap> nhaCungCapList = new();
     private List<ChatLieu> dongGoiList = new();
 
@@ -308,19 +337,19 @@
         try
         {
 
-            monAn = await apiService.GetAsync<ProductDTO>($"Product/{MonAnId}");
-            if (monAn != null)
+            product = await apiService.GetAsync<ProductDTO>($"Product/{ProductId}");
+            if (product != null)
             {
-                originalMonAn = new ProductDTO
+                originalProduct = new ProductDTO
                 {
-                    Id = monAn.Id,
-                    Ten = monAn.Ten,
-                    Mota = monAn.Mota,
-                    TrangThai = monAn.TrangThai
+                    Id = product.Id,
+                    Ten = product.Ten,
+                    Mota = product.Mota,
+                    TrangThai = product.TrangThai
                 };
             }
 
-            danhSachChiTiet = (await ChiTietProductService.GetChiTiet(MonAnId))?.ToList() ?? new List<ChiTietMonAnDTO>();
+            danhSachChiTiet = (await ChiTietProductService.GetChiTiet(ProductId))?.ToList() ?? new List<ChiTietProductDTO>();
 
             await LoadDropdownData();
         }
@@ -334,8 +363,8 @@
 
     private async Task LoadDropdownData()
     {
-        loaiViList = await apiService.GetAsync<List<BoNhoTrong>>("BoNhoTrong") ?? new();
-        kichCoList = await apiService.GetAsync<List<KichCo>>("KichCo") ?? new();
+        loaiViList = await apiService.GetAsync<List<MauSac>>("MauSac") ?? new();
+        kichCoList = await apiService.GetAsync<List<BoNhoTrong>>("BoNhoTrong") ?? new();
         nhaCungCapList = await apiService.GetAsync<List<NhaCungCap>>("NhaCungCap") ?? new();
         dongGoiList = await apiService.GetAsync<List<ChatLieu>>("ChatLieu") ?? new();
         theLoaisList = await apiService.GetAsync<List<TheLoai>>("TheLoai") ?? new();
@@ -364,20 +393,23 @@
     {
         try
         {
-            if (monAn != null)
+            if (product != null)
             {
-                var result = await apiService.PutAsync<ProductDTO>($"Product", monAn);
+                var result = await apiService.PutAsync<ProductDTO>($"Product", product);
                 if (result)
                 {
                     isEditMode = false;
-                    originalMonAn = new ProductDTO
+                    originalProduct = new ProductDTO
                     {
-                        Id = monAn.Id,
-                        Ten = monAn.Ten,
-                        Mota = monAn.Mota,
-                        TrangThai = monAn.TrangThai
+                        Id = product.Id,
+                        Ten = product.Ten,
+                        Mota = product.Mota,
+                        TacGiaId = product.TacGiaId,
+                        NhaXuatBanId = product.NhaXuatBanId,
+                        TrangThai = product.TrangThai
                     };
                     ShowMessage("Cập nhật món ăn thành công!", true);
+                    LoadData();
                 }
                 else
                 {
@@ -393,11 +425,11 @@
 
     private void CancelEdit()
     {
-        if (originalMonAn != null && monAn != null)
+        if (originalProduct != null && product != null)
         {
-            monAn.Ten = originalMonAn.Ten;
-            monAn.Mota = originalMonAn.Mota;
-            monAn.TrangThai = originalMonAn.TrangThai;
+            product.Ten = originalProduct.Ten;
+            product.Mota = originalProduct.Mota;
+            product.TrangThai = originalProduct.TrangThai;
         }
         isEditMode = false;
     }
@@ -411,11 +443,11 @@
     }
 
 
-    private void EditChiTiet(ChiTietMonAnDTO chiTiet)
+    private void EditChiTiet(ChiTietProductDTO chiTiet)
     {
         isEditingDetail = true;
         editingChiTiet = chiTiet;
-        tempChiTietList = new List<ChiTietMonAnDTO> { chiTiet };
+        tempChiTietList = new List<ChiTietProductDTO> { chiTiet };
         showDetailModal = true;
     }
 
@@ -427,7 +459,7 @@
         tempChiTietList = new();
     }
 
-    private async Task DoiTrangThai(ChiTietMonAnDTO chiTiet)
+    private async Task DoiTrangThai(ChiTietProductDTO chiTiet)
     {
         if (await JSRuntime.InvokeAsync<bool>("confirm", $"Bạn có chắc muốn đổi trạng thái không?"))
         {
@@ -435,7 +467,21 @@
             {
 
                 chiTiet.TrangThai = !chiTiet.TrangThai;
-                var success = await apiService.PutAsync<ChiTietProduct>($"ChiTietMonAn", _mapper.Map<ChiTietProduct>(chiTiet));
+                var success = await apiService.PutAsync<ChiTietProduct>($"ChiTietProduct", _mapper.Map<ChiTietProduct>(new ChiTietProductUpdateDTO
+                {
+                    Id = chiTiet.Id,
+                    Gia = chiTiet.Gia,
+                    Mota = chiTiet.Mota,
+                    Soluong = chiTiet.Soluong,
+                    SoTrang = chiTiet.SoTrang,
+                    TrangThai = chiTiet.TrangThai,
+                    MauSacId = chiTiet.MauSacId,
+                    BoNhoTrongId = chiTiet.BoNhoTrongId,
+                    NhaCungCapId = chiTiet.NhaCungCapId,
+                    ChatLieuId = chiTiet.ChatLieuId,
+                    DanhSachAnh = chiTiet.DanhSachAnh,
+                    ProductId = chiTiet.ProductId
+                }));
 
                 if (success)
                 {
@@ -455,22 +501,37 @@
         }
     }
 
-    private async Task OnChiTietAdded(ChiTietMonAnDTO chiTiet)
+    private async Task OnChiTietAdded(ChiTietProductDTO chiTiet)
     {
         try
         {
-            var check = danhSachChiTiet.Find(x => x.LoaiViId == chiTiet.LoaiViId && x.ChatLieuId == chiTiet.ChatLieuId && x.BoNhoTrongId == chiTiet.BoNhoTrongId && x.KichCoId == chiTiet.KichCoId);
+
+            var check = danhSachChiTiet.Find(x => x.MauSacId == chiTiet.MauSacId && x.ChatLieuId == chiTiet.ChatLieuId && x.NhaCungCapId == chiTiet.NhaCungCapId && x.BoNhoTrongId == chiTiet.BoNhoTrongId);
             if (check != null)
             {
                 chiTiet.Id = check.Id; 
-                var result2 = await apiService.PutAsync<ChiTietProduct>($"ChiTietProduct", _mapper.Map<ChiTietProduct>(chiTiet));
+                var result2 = await apiService.PutAsync<ChiTietProduct>($"ChiTietProduct", _mapper.Map<ChiTietProduct>(new ChiTietProductUpdateDTO
+                {
+                    Id = chiTiet.Id,
+                    Gia = chiTiet.Gia,
+                    Mota = chiTiet.Mota,
+                    Soluong = chiTiet.Soluong,
+                    SoTrang = chiTiet.SoTrang,
+                    TrangThai = chiTiet.TrangThai,
+                    MauSacId = chiTiet.MauSacId,
+                    BoNhoTrongId = chiTiet.BoNhoTrongId,
+                    NhaCungCapId = chiTiet.NhaCungCapId,
+                    ChatLieuId = chiTiet.ChatLieuId,
+                    DanhSachAnh = chiTiet.DanhSachAnh,
+                    ProductId = chiTiet.ProductId
+                }));
                 if (result2)
                 {
                     if (chiTiet.DanhSachAnh != null)
                     {
                         foreach (var item in chiTiet.DanhSachAnh)
                         {
-                            item.ChiTietMonAnId = chiTiet.Id;
+                            item.ChiTietProductId = chiTiet.Id;
                             try
                             {
                                 var result = await apiService.PostAsync<Anh, Anh>("Anh", _mapper.Map<Anh>(item));
@@ -486,7 +547,7 @@
 
                         }
                     }
-                    LoadData();
+                    await LoadData();
                     ShowMessage("Cập nhật chi tiết thành công!", true);
                     CloseDetailModal();
                 }
@@ -505,7 +566,7 @@
                     {
                         try
                         {
-                            item.ChiTietMonAnId = result.Id;
+                            item.ChiTietProductId = result.Id;
                             var result2 = await apiService.PostAsync<Anh, Anh>("Anh", _mapper.Map<Anh>(item));
                             if (result2 == null)
                             {
@@ -521,10 +582,10 @@
                 }
                 if (result != null)
                 {
-                    LoadDropdownData();
+                    await LoadDropdownData();
                     ShowMessage("Thêm chi tiết thành công!", true);
                     CloseDetailModal();
-                    LoadData();
+                    await LoadData();
                 }
                 else
                 {
@@ -539,22 +600,36 @@
         }
     }
 
-    private async Task OnChiTietRemoved(ChiTietMonAnDTO chiTiet)
+    private async Task OnChiTietRemoved(ChiTietProductDTO chiTiet)
     {
         await Task.CompletedTask;
     }
 
-    private async Task OnChiTietEdited(ChiTietMonAnDTO chiTiet)
+    private async Task OnChiTietEdited(ChiTietProductDTO chiTiet)
     {
         chiTiet.Id = editingChiTiet.Id;
-        var result = await apiService.PutAsync<ChiTietProduct>($"ChiTietProduct", _mapper.Map<ChiTietProduct>(chiTiet));
+        var result = await apiService.PutAsync<ChiTietProduct>($"ChiTietProduct", _mapper.Map<ChiTietProduct>(new ChiTietProductUpdateDTO
+        {
+            Id = chiTiet.Id,
+            Gia = chiTiet.Gia,
+            Mota = chiTiet.Mota,
+            Soluong = chiTiet.Soluong,
+            SoTrang = chiTiet.SoTrang,
+            TrangThai = chiTiet.TrangThai,
+            MauSacId = chiTiet.MauSacId,
+            BoNhoTrongId = chiTiet.BoNhoTrongId,
+            NhaCungCapId = chiTiet.NhaCungCapId,
+            ChatLieuId = chiTiet.ChatLieuId,
+            DanhSachAnh = chiTiet.DanhSachAnh,
+            ProductId = chiTiet.ProductId
+        }));
         if (chiTiet.DanhSachAnh != null)
         {
             foreach (var item in chiTiet.DanhSachAnh)
             {
                 try
                 {
-                    item.ChiTietMonAnId = chiTiet.Id;
+                    item.ChiTietProductId = chiTiet.Id;
                     var result2 = await apiService.PostAsync<Anh,Anh>("Anh", _mapper.Map<Anh>(item));
                     if (result2 != null)
                     {
@@ -570,7 +645,7 @@
         }
         if (result != null)
         {
-            LoadData();
+            await LoadData();
             ShowMessage("Cập nhật chi tiết thành công!", true);
             CloseDetailModal();
         }

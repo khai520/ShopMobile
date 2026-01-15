@@ -5,35 +5,35 @@
 <link href="/css/ThemChiTiet.css" rel="stylesheet" />
 
 <div class="form-section">
-    <h3>➕ Chi tiết món ăn</h3>
+    <h3>➕ Chi tiết sản phẩm</h3>
 
     <div class="form-inline">
         <div>
-            <label for="loaivi">Bộ nhớ trong</label>
+            <label for="loaivi">Màu Sắc</label>
             <div class="select-with-add row-layout ">
             
-                <InputSelect id="loaivi" @bind-Value="chiTietMoi.LoaiViId">
-                    <option selected value="@Guid.Empty">-- Bộ nhớ trong --</option>
+                <InputSelect id="loaivi" @bind-Value="chiTietMoi.MauSacId">
+                    <option selected value="@Guid.Empty">-- Màu Sắc --</option>
                     @foreach (var item in loaiViList)
                     {
                         <option value="@item.Id">@item.Ten</option>
                     }
                 </InputSelect>
-                <button type="button" class="btn-add" @onclick='() => ShowModal("BoNhoTrong")'>+</button>
+                <button type="button" class="btn-add" @onclick='() => ShowModal("MauSac")'>+</button>
             </div>
         </div>
         <div>
-            <label for="kichco">Kích Cỡ</label>
+            <label for="kichco">Bộ nhớ trong</label>
             <div class="select-with-add row-layout ">
             
-                <InputSelect id="kichco" @bind-Value="chiTietMoi.KichCoId">
-                    <option selected value="@Guid.Empty">-- Kích Cỡ --</option>
+                <InputSelect id="kichco" @bind-Value="chiTietMoi.BoNhoTrongId">
+                    <option selected value="@Guid.Empty">-- Bộ Nhớ Trong --</option>
                     @foreach (var item in kichCoList)
                     {
                         <option value="@item.Id">@item.Ten</option>
                     }
                 </InputSelect>
-                <button type="button" class="btn-add" @onclick='() => ShowModal("KichCo")'>+</button>
+                <button type="button" class="btn-add" @onclick='() => ShowModal("BoNhoTrong")'>+</button>
             </div>
 
         </div>
@@ -41,7 +41,7 @@
             <label for="nhacungcap">Nhà Cung Cấp</label>
             <div class="select-with-add row-layout ">
             
-                <InputSelect id="nhacungcap" @bind-Value="chiTietMoi.BoNhoTrongId">
+                <InputSelect id="nhacungcap" @bind-Value="chiTietMoi.NhaCungCapId">
                     <option selected value="@Guid.Empty">-- Nhà cung cấp --</option>
                     @foreach (var item in nhaCungCapList)
                     {
@@ -53,17 +53,17 @@
 
         </div>
         <div>
-            <label for="donggoi">Chất liệu</label>
+            <label for="chatlieu">Chất liệu</label>
             <div class="select-with-add row-layout ">
             
-                <InputSelect id="donggoi" @bind-Value="chiTietMoi.ChatLieuId">
+                <InputSelect id="chatlieu" @bind-Value="chiTietMoi.ChatLieuId">
                     <option selected value="@Guid.Empty">-- Chất liệu --</option>
                     @foreach (var item in nguyenLieuList)
                     {
                         <option value="@item.Id">@item.Ten</option>
                     }
                 </InputSelect>
-                <button type="button" class="btn-add" @onclick='() => ShowModal("DongGoi")'>+</button>
+                <button type="button" class="btn-add" @onclick='() => ShowModal("ChatLieu")'>+</button>
             </div>
         </div>
             
@@ -78,9 +78,9 @@
             <InputNumber @bind-Value="chiTietMoi.Gia" placeholder="Giá" @attributes="@(new Dictionary<string, object> { { "min", "0" } })" />
         </div>
         <div>
-            Số ngày sử dụng
+            Số trang sách
             <br />
-            <InputNumber @bind-Value="chiTietMoi.SoNgayHSD" placeholder="Số ngày sử dụng" @attributes="@(new Dictionary<string, object> { { "min", "0" } })" />
+            <InputNumber @bind-Value="chiTietMoi.SoTrang" placeholder="Số trang sách" @attributes="@(new Dictionary<string, object> { { "min", "0" } })" />
         </div>
 
         @if (ShowStatus)
@@ -160,7 +160,7 @@
                     <th>Chất liệu</th>
                     <th>Số lượng</th>
                     <th>Giá</th>
-                    <th>Số ngày sử dụng</th>
+                    <th>Số trang sách</th>
                     @if (ShowDescription)
                     {
                         <th>Mô tả</th>
@@ -177,9 +177,9 @@
                 @foreach (var ct in DanhSachChiTiet)
                 {
                     <tr>
-                        <td>@loaiViList.FirstOrDefault(x => x.Id == ct.LoaiViId)?.Ten</td>
-                        <td>@kichCoList.FirstOrDefault(x => x.Id == ct.KichCoId)?.Ten</td>
-                        <td>@nhaCungCapList.FirstOrDefault(x => x.Id == ct.BoNhoTrongId)?.Ten</td>
+                        <td>@loaiViList.FirstOrDefault(x => x.Id == ct.MauSacId)?.Ten</td>
+                        <td>@kichCoList.FirstOrDefault(x => x.Id == ct.BoNhoTrongId)?.Ten</td>
+                        <td>@nhaCungCapList.FirstOrDefault(x => x.Id == ct.NhaCungCapId)?.Ten</td>
                         <td>@nguyenLieuList.FirstOrDefault(x => x.Id == ct.ChatLieuId)?.Ten</td>
                         <td>
                             @if (AllowEditInTable)
@@ -206,12 +206,12 @@
                         <td>
                             @if (AllowEditInTable)
                             {
-                                <InputNumber @bind-Value="@ct.SoNgayHSD" placeholder="Số ngày sử dụng"
+                                <InputNumber @bind-Value="@ct.SoTrang" placeholder="Số trang sách"
                                              @attributes="@(new Dictionary<string, object> { { "min", "0" } })" />
                             }
                             else
                             {
-                                @ct.SoNgayHSD
+                                @ct.SoTrang
                             }
                         </td>
                         @if (ShowDescription)
@@ -250,8 +250,8 @@
     }
 </div>
 
-@if (showModal)
-{
+@if (ShowStatus)
+        {
     <div class="modal-overlay">
         <div class="modal-box">
             <h4>Thêm mới @modalType</h4>
@@ -277,8 +277,8 @@
 
 @code {
     // Parameters - có thể tùy chỉnh từ component cha
-    [Parameter] public List<ChiTietMonAnDTO> DanhSachChiTiet { get; set; } = new();
-    [Parameter] public EventCallback<List<ChiTietMonAnDTO>> DanhSachChiTietChanged { get; set; }
+    [Parameter] public List<ChiTietProductDTO> DanhSachChiTiet { get; set; } = new();
+    [Parameter] public EventCallback<List<ChiTietProductDTO>> DanhSachChiTietChanged { get; set; }
     [Parameter] public string MonAnId { get; set; } = "";
     [Parameter] public string ButtonText { get; set; } = "+ Tạm thêm";
     [Parameter] public bool ShowFileUpload { get; set; } = true;
@@ -286,15 +286,16 @@
     [Parameter] public bool ShowStatus { get; set; } = false;
     [Parameter] public bool ShowCancelButton { get; set; } = false;
     [Parameter] public bool AllowEditInTable { get; set; } = true;
-    [Parameter] public EventCallback<ChiTietMonAnDTO> OnThemChiTiet { get; set; }
-    [Parameter] public EventCallback<ChiTietMonAnDTO> OnSuaChiTiet { get; set; }
-    [Parameter] public EventCallback<ChiTietMonAnDTO> OnXoaChiTiet { get; set; }
+    [Parameter] public EventCallback<ChiTietProductDTO> OnThemChiTiet { get; set; }
+    [Parameter] public EventCallback<ChiTietProductDTO> OnSuaChiTiet { get; set; }
+    [Parameter] public EventCallback<ChiTietProductDTO> OnXoaChiTiet { get; set; }
     [Parameter] public EventCallback OnHuyChiTiet { get; set; }
     [Parameter] public EventCallback<List<AnhDTO>> AnhXoa { get; set; } 
-    [Parameter] public ChiTietMonAnDTO ChiTietMonAnSua { get; set; } = new();
+    [Parameter] public ChiTietProductDTO ChiTietMonAnSua { get; set; } = new();
+
 
     // Private fields
-    private ChiTietMonAnDTO chiTietMoi = new() { DanhSachAnh = new List<AnhDTO>(), TrangThai = true };
+    private ChiTietProductDTO chiTietMoi = new() { DanhSachAnh = new List<AnhDTO>(), TrangThai = true };
     private string modalType = "";
     private string newItemTen = "";
     private string newItemMota = "";
@@ -302,8 +303,8 @@
     private string successMessage = "";
     private bool showSuccessMessage = false;
     // Dropdown lists
-    private List<BoNhoTrong> loaiViList = new();
-    private List<KichCo> kichCoList = new();
+    private List<MauSac> loaiViList = new();
+    private List<BoNhoTrong> kichCoList = new();
     private List<NhaCungCap> nhaCungCapList = new();
     private List<ChatLieu> nguyenLieuList = new();
     private List<AnhDTO> listAnh = new();
@@ -318,8 +319,8 @@
 
     private async Task LoadDropdownData()
     {
-        loaiViList = await apiService.GetAsync<List<BoNhoTrong>>("BoNhoTrong") ?? new();
-        kichCoList = await apiService.GetAsync<List<KichCo>>("KichCo") ?? new();
+        loaiViList = await apiService.GetAsync<List<MauSac>>("MauSac") ?? new();
+        kichCoList = await apiService.GetAsync<List<BoNhoTrong>>("BoNhoTrong") ?? new();
         nhaCungCapList = await apiService.GetAsync<List<NhaCungCap>>("NhaCungCap") ?? new();
         nguyenLieuList = await apiService.GetAsync<List<ChatLieu>>("ChatLieu") ?? new();
         StateHasChanged();
@@ -328,20 +329,20 @@
     {
         if (ChiTietMonAnSua != null)
         {
-            chiTietMoi = new ChiTietMonAnDTO
+            chiTietMoi = new ChiTietProductDTO
             {
                 Id = ChiTietMonAnSua.Id,
                 ProductId = ChiTietMonAnSua.ProductId,
-                LoaiViId = ChiTietMonAnSua.LoaiViId,
-                KichCoId = ChiTietMonAnSua.KichCoId,
+                MauSacId = ChiTietMonAnSua.MauSacId,
                 BoNhoTrongId = ChiTietMonAnSua.BoNhoTrongId,
+                NhaCungCapId = ChiTietMonAnSua.NhaCungCapId,
                 ChatLieuId = ChiTietMonAnSua.ChatLieuId,
                 Soluong = ChiTietMonAnSua.Soluong,
                 Gia = ChiTietMonAnSua.Gia,
                 TrangThai = ChiTietMonAnSua.TrangThai,
                 Mota = ChiTietMonAnSua.Mota,
                 DanhSachAnh = ChiTietMonAnSua.DanhSachAnh?.ToList() ?? new(),
-                SoNgayHSD = ChiTietMonAnSua.SoNgayHSD
+                SoTrang = ChiTietMonAnSua.SoTrang,
             };
 
         }
@@ -354,7 +355,7 @@
             await JSRuntime.InvokeVoidAsync("alert", "Vui lòng nhập thông tin món ăn trước");
             return;
         }
-        if (chiTietMoi.LoaiViId == null && chiTietMoi.KichCoId == null && chiTietMoi.BoNhoTrongId == null && chiTietMoi.ChatLieuId == null)
+        if (chiTietMoi.MauSacId == null && chiTietMoi.BoNhoTrongId == null && chiTietMoi.NhaCungCapId == null && chiTietMoi.ChatLieuId == null)
         {
             await JSRuntime.InvokeVoidAsync("alert", "Vui lòng thêm thuộc tính");
             return;
@@ -365,9 +366,9 @@
 
 
         var trung = DanhSachChiTiet.FirstOrDefault(x =>
-            x.LoaiViId == chiTietMoi.LoaiViId &&
-            x.KichCoId == chiTietMoi.KichCoId &&
+            x.MauSacId == chiTietMoi.MauSacId &&
             x.BoNhoTrongId == chiTietMoi.BoNhoTrongId &&
+            x.NhaCungCapId == chiTietMoi.NhaCungCapId &&
             x.ChatLieuId == chiTietMoi.ChatLieuId);
 
         if (trung != null)
@@ -399,12 +400,12 @@
         StateHasChanged();
     }
 
-    private async Task SuaChiTiet(ChiTietMonAnDTO chiTiet)
+    private async Task SuaChiTiet(ChiTietProductDTO chiTiet)
     {
         await OnSuaChiTiet.InvokeAsync(chiTiet);
     }
 
-    private async Task XoaChiTiet(ChiTietMonAnDTO chiTiet)
+    private async Task XoaChiTiet(ChiTietProductDTO chiTiet)
     {
         DanhSachChiTiet.Remove(chiTiet);
         await OnXoaChiTiet.InvokeAsync(chiTiet);
@@ -418,7 +419,7 @@
 
     private void ResetChiTietMoi()
     {
-        chiTietMoi = new ChiTietMonAnDTO
+        chiTietMoi = new ChiTietProductDTO
         {
             DanhSachAnh = new List<AnhDTO>(),
             TrangThai = true,
@@ -502,14 +503,14 @@
 
         switch (modalType)
         {
-            case "BoNhoTrong":
-                var newLoaiVi = new BoNhoTrong { Id = id, Ten = newItemTen, Mota = newItemMota };
-                await apiService.PostAsync<BoNhoTrong, BoNhoTrong>("BoNhoTrong", newLoaiVi);
+            case "MauSac":
+                var newLoaiVi = new MauSac { Id = id, Ten = newItemTen, Mota = newItemMota };
+                await apiService.PostAsync<MauSac, MauSac>("MauSac", newLoaiVi);
                 await LoadDropdownData();
                 break;
-            case "KichCo":
-                var newKichCo = new KichCo { Id = id, Ten = newItemTen, Mota = newItemMota };
-                await apiService.PostAsync<KichCo, KichCo>("KichCo", newKichCo);
+            case "BoNhoTrong":
+                var newKichCo = new BoNhoTrong { Id = id, Ten = newItemTen, Mota = newItemMota };
+                await apiService.PostAsync<BoNhoTrong, BoNhoTrong>("BoNhoTrong", newKichCo);
                 await LoadDropdownData();
                 break;
             case "NhaCungCap":
@@ -517,7 +518,7 @@
                 await apiService.PostAsync<NhaCungCap, NhaCungCap>("NhaCungCap", newNCC);
                 await LoadDropdownData();
                 break;
-            case "DongGoi":
+            case "ChatLieu":
                 var newNL = new ChatLieu { Id = id, Ten = newItemTen, Mota = newItemMota };
                 await apiService.PostAsync<ChatLieu, ChatLieu>("ChatLieu", newNL);
                 await LoadDropdownData();

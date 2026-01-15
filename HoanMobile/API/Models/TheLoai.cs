@@ -13,6 +13,6 @@ namespace API.Models
         [RegularExpression(@"^[\p{L}0-9\s]+$", ErrorMessage = "Không được chứa ký tự đặc biệt")]
         public string? Mota { get; set; }
         [JsonIgnore]
-        public virtual ICollection<Product>? MonAns { get; set; }
+        public virtual ICollection<Product>? Product { get; set; }
     }
 }

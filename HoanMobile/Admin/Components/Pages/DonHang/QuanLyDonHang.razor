@@ -190,7 +190,7 @@
 
                             <div class="item-info item-info-badges">
                                 <div class="item-name">@chiTiet.Ten</div>
-                                <div class="item-name">@chiTiet.BoNhoTrong</div>
+                                <div class="item-name">@chiTiet.TheLoai</div>
                                 <div class="item-name">@chiTiet.KichCo</div>
                                 <div class="item-name">@chiTiet.ChatLieu</div>
                                 <div class="item-details">@chiTiet.Mota</div>
@@ -247,7 +247,7 @@
     private Dictionary<string, List<HoaDonChiTietDTO>> ChiTietTheoHoaDon = new();
     private HoaDon selectedHoaDon;
     private List<HoaDonChiTietDTO> selectedChiTiet;
-    private List<ChiTietMonAnDTO> ChiTietMonAnDTOs = new();
+    private List<ChiTietProductDTO> ChiTietMonAnDTOs = new();
     private string TuKhoa;
     private string TrangThai;
     private readonly List<string> TrangThaiList = new()
@@ -264,7 +264,7 @@
     {
         var allHoaDon = await ApiService.GetAsync<List<HoaDon>>("HoaDon");
         DanhSachChiTiet = await ApiService.GetAsync<List<HoaDonChiTietDTO>>("HoaDonChiTiet") ?? new();
-        
+
 
         ChiTietTheoHoaDon = DanhSachChiTiet
             .GroupBy(ct => ct.HoaDonId)
@@ -335,7 +335,7 @@
             foreach (var item in selectedChiTiet)
             {
                 var chiTietMonAnList = await GetChiTietMonAnService.GetAll();
-                var monAnChiTiet = chiTietMonAnList.FirstOrDefault(x => x.Id == item.ChiTietMonAnId);
+                var monAnChiTiet = chiTietMonAnList.FirstOrDefault(x => x.Id == item.ChiTietProductId);
                 if (monAnChiTiet == null) continue;
 
                 if (monAnChiTiet.Soluong < item.Soluong)
@@ -345,7 +345,21 @@
                 }
 
                 monAnChiTiet.Soluong -= item.Soluong;
-                var updateResult = await ApiService.PutAsync("ChiTietProduct", monAnChiTiet);
+                var updateResult = await ApiService.PutAsync("ChiTietProduct", new ChiTietProductUpdateDTO
+                {
+                    Id = monAnChiTiet.Id,
+                    Gia = monAnChiTiet.Gia,
+                    Mota = monAnChiTiet.Mota,
+                    Soluong = monAnChiTiet.Soluong,
+                    SoTrang = monAnChiTiet.SoTrang,
+                    TrangThai = monAnChiTiet.TrangThai,
+                    MauSacId = monAnChiTiet.MauSacId,
+                    BoNhoTrongId = monAnChiTiet.BoNhoTrongId,
+                    NhaCungCapId = monAnChiTiet.NhaCungCapId,
+                    ChatLieuId = monAnChiTiet.ChatLieuId,
+                    DanhSachAnh = monAnChiTiet.DanhSachAnh,
+                    ProductId = monAnChiTiet.ProductId
+                });
                 if (!updateResult)
                 {
                     await JS.InvokeVoidAsync("alert", $"Cập nhật tồn kho cho {monAnChiTiet.Ten} thất bại!");
@@ -370,7 +384,7 @@
     private bool showHistory = false;
     private List<LichSuTrangThai> selectedLichSu = new();
 
-    private Dictionary<Guid, List<ChiTietMonAnDTO>> MonAnTheoLichSu = new();
+    private Dictionary<Guid, List<ChiTietProductDTO>> MonAnTheoLichSu = new();
 
     private async Task XemChiTiet(string hoaDonId)
     {
@@ -387,12 +401,12 @@
 
         foreach (var hoaDonCt in selectedChiTiet)
         {
-            var chiTietMonAn = chiTietMonAnList.FirstOrDefault(ct => ct.Id == hoaDonCt.ChiTietMonAnId);
+            var chiTietMonAn = chiTietMonAnList.FirstOrDefault(ct => ct.Id == hoaDonCt.ChiTietProductId);
             if (chiTietMonAn == null) continue;
 
             chiTietMonAn.SoLuongDat = hoaDonCt.Soluong;
 
-            MonAnTheoLichSu[hoaDonCt.Id] = new List<ChiTietMonAnDTO> { chiTietMonAn };
+            MonAnTheoLichSu[hoaDonCt.Id] = new List<ChiTietProductDTO> { chiTietMonAn };
         }
 
         showHistory = true;

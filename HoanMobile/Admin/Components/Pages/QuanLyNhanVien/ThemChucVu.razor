@@ -55,7 +55,7 @@
         if (type == "add")
         {
             var newTheLoai = new ChucVu { Ten = newItemTen, Mota = newItemMota };
-            await apiService.PostAsync<ChucVu, ChucVu>("TheLoai", newTheLoai);
+            await apiService.PostAsync<ChucVu, ChucVu>("MauSac", newTheLoai);
         } 
         else
         {
@@ -71,7 +71,7 @@
             else
             {
                 var newTheLoai = new ChucVu { Ten = newItemTen, Mota = newItemMota };
-                await apiService.PutAsync<ChucVu>("TheLoai", newTheLoai);
+                await apiService.PutAsync<ChucVu>("MauSac", newTheLoai);
             }
         }
         await OnLoad.InvokeAsync();

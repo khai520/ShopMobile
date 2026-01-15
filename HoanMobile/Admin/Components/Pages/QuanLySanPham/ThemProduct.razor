@@ -1,4 +1,4 @@
-﻿@page "/them-mon-an"
+﻿@page "/product"
 @layout Layout.MainLayout
 @using API.Models.DTO
 @using AutoMapper
@@ -16,7 +16,7 @@
         <button class="back-btn" @onclick="GoBack">
             <i class="fas fa-arrow-left"></i> Quay lại
         </button>
-        <h1>🍽️ Thêm sản phẩm</h1>
+        <h1> Thêm sản phẩm</h1>
     </div>
 
     <div class="form-container">
@@ -42,13 +42,13 @@
                         <div class="select-with-add row-layout ">
 
                             <InputSelect id="loaivi" @bind-Value="model.MonAn.TheLoaiId">
-                                <option selected value="@Guid.Empty">-- Thể loại --</option>
+                                <option selected value="@Guid.Empty">-- Thể Loại --</option>
                                 @foreach (var item in theLoaisList)
                                 {
                                     <option value="@item.Id">@item.Ten</option>
                                 }
                             </InputSelect>
-                            <button type="button" class="btn-add" @onclick='() => ShowModal("TheLoai")'>+</button>
+                            <button type="button" class="btn-add" @onclick='() => ShowModal("Thể Loại")'>+</button>
                         </div>
                     </div>
                     <div>
@@ -62,7 +62,7 @@
                                     <option value="@item.Id">@item.Ten</option>
                                 }
                             </InputSelect>
-                            <button type="button" class="btn-add" @onclick='() => ShowModal("ThuongHieu")'>+</button>
+                            <button type="button" class="btn-add" @onclick='() => ShowModal("Thương Hiệu")'>+</button>
                         </div>
 
                     </div>
@@ -74,7 +74,7 @@
             </div>
 
             <!-- Sử dụng component chi tiết sản phẩm -->
-            <ThemChiTietMonAn
+            <ThemChiTietProduct
                 DanhSachChiTiet="@model.DanhSachChiTiet"
                 MonAnId="@model.MonAn.Id"
                 ButtonText="+ Tạm thêm"
@@ -133,7 +133,7 @@
     public class MonAnFormModel
     {
         public Product MonAn { get; set; } = new();
-        public List<ChiTietMonAnDTO> DanhSachChiTiet { get; set; } = new();
+        public List<ChiTietProductDTO> DanhSachChiTiet { get; set; } = new();
     }
 
 
@@ -177,7 +177,7 @@
                         {
                             try
                             {
-                                item.ChiTietMonAnId = result1.Id;
+                                item.ChiTietProductId = result1.Id;
                                 var result = await apiService.PostAsync<Anh, Anh>("Anh", _mapper.Map<Anh>(item));
                                 if (result == null)
                                 {
@@ -213,7 +213,7 @@
     private List<ThuongHieu> thuongHieusList = new();
     private async Task LoadDropdownData()
     {
-        theLoaisList = await apiService.GetAsync<List<TheLoai>>("TheLoai") ?? new();
+        theLoaisList = await apiService.GetAsync<List<TheLoai>>("MauSac") ?? new();
         thuongHieusList = await apiService.GetAsync<List<ThuongHieu>>("ThuongHieu") ?? new();
         StateHasChanged();
     }
@@ -229,12 +229,12 @@
 
         switch (modalType)
         {
-            case "TheLoai":
+            case "Thể Loại":
                 var newLoaiVi = new TheLoai { Id = id, Ten = newItemTen, Mota = newItemMota };
                 await apiService.PostAsync<TheLoai, TheLoai>("TheLoai", newLoaiVi);
                 await LoadDropdownData();
                 break;
-            case "ThuongHieu":
+            case "Thương Hiệu":
                 var newKichCo = new ThuongHieu { Id = id, Ten = newItemTen, Mota = newItemMota };
                 await apiService.PostAsync<ThuongHieu, ThuongHieu>("ThuongHieu", newKichCo);
                 await LoadDropdownData();
@@ -261,19 +261,19 @@
     }
 
     
-    private async Task OnChiTietAdded(ChiTietMonAnDTO chiTiet)
+    private async Task OnChiTietAdded(ChiTietProductDTO chiTiet)
     {
         
         Console.WriteLine($"Đã thêm chi tiết: {chiTiet.Id}");
     }
 
-    private async Task OnChiTietRemoved(ChiTietMonAnDTO chiTiet)
+    private async Task OnChiTietRemoved(ChiTietProductDTO chiTiet)
     {
         
         Console.WriteLine($"Đã xóa chi tiết: {chiTiet.Id}");
     }
 
-    private async Task OnChiTietEdited(ChiTietMonAnDTO chiTiet)
+    private async Task OnChiTietEdited(ChiTietProductDTO chiTiet)
     {
         
         Console.WriteLine($"Đã sửa chi tiết: {chiTiet.Id}");

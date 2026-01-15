@@ -9,8 +9,8 @@ namespace API.Models
         [Range(1, int.MaxValue, ErrorMessage = "Số lượng phải lớn hơn 0")]
         public int SoLuong { get; set; }
         public string? ComboId { get; set; }
-        public Guid? ChiTietMonAnId { get; set; }
+        public Guid? ChiTietProductId { get; set; }
         public virtual Combo Combo { get; set; }
-        public virtual ChiTietProduct ChiTietMonAn { get; set; }
+        public virtual ChiTietProduct ChiTietProduct { get; set; }
     }
 }

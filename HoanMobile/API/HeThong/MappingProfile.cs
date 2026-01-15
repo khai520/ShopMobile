@@ -13,7 +13,7 @@ namespace API.HeThong
             CreateMap<Combo, ComboDTO>().ReverseMap();
             CreateMap<ChiTietCombo, ChiTietComboDTO>().ReverseMap();
             CreateMap<ChiTietGiamGia, ChiTietGiamGiaDTO>().ReverseMap();
-            CreateMap<ChiTietProduct, ChiTietMonAnDTO>()
+            CreateMap<ChiTietProduct, ChiTietProductDTO>()
                 .ForMember(t => t.Ten, opt => opt.MapFrom(src =>
                     src.Product != null && !string.IsNullOrWhiteSpace(src.Product.Ten)
                     ? src.Product.Ten : "")) 
@@ -25,33 +25,34 @@ namespace API.HeThong
                     ? src.NhaCungCap.Ten : ""))
                 .ForMember(anh => anh.DanhSachAnh,  opt =>  opt.MapFrom(src => 
                     src.Anhs !=  null  ? src.Anhs : new List<Anh>()))
-                .ForMember(tl => tl.BoNhoTrong, opt => opt.MapFrom(src =>
+                .ForMember(tl => tl.TheLoai, opt => opt.MapFrom(src =>
+                    src.MauSac != null && !string.IsNullOrWhiteSpace(src.MauSac.Ten)
+                    ? src.MauSac.Ten : ""))
+                .ForMember(tl => tl.KichCo, opt => opt.MapFrom(src =>
                     src.BoNhoTrong != null && !string.IsNullOrWhiteSpace(src.BoNhoTrong.Ten)
                     ? src.BoNhoTrong.Ten : ""))
-                .ForMember(tl => tl.KichCo, opt => opt.MapFrom(src =>
-                    src.KichCo != null && !string.IsNullOrWhiteSpace(src.KichCo.Ten)
-                    ? src.KichCo.Ten : ""))
                 .ForMember(dg => dg.Gia, opt => opt.MapFrom(src => src.Gia))
                 .ReverseMap();
 
-            CreateMap<ChiTietMonAnDTO, ChiTietProduct>()
+            CreateMap<ChiTietProductUpdateDTO, ChiTietProduct>()
                 .ForMember(dest => dest.Product, opt => opt.Ignore())
                 .ForMember(dest => dest.NhaCungCap, opt => opt.Ignore())
                 .ForMember(dest => dest.ChatLieu, opt => opt.Ignore())
-                .ForMember(dest => dest.BoNhoTrong, opt => opt.Ignore())
-                .ForMember(dest => dest.KichCo, opt => opt.Ignore());
+                .ForMember(dest => dest.MauSac, opt => opt.Ignore())
+                .ForMember(dest => dest.BoNhoTrong, opt => opt.Ignore());
 
             CreateMap<ChucVu, ChucVuDTO>().ReverseMap();
             CreateMap<DiaChi, DiaChiDTO>().ReverseMap();
-            CreateMap<ChatLieu, DongGoiDTO>().ReverseMap();
+            CreateMap<ChatLieu, ChatLieuDTO>().ReverseMap();
             CreateMap<GiamGia, Voucher>().ReverseMap();
             CreateMap<GioHang, GioHangDTO>().ReverseMap();
             CreateMap<HinhThucThanhToan, HinhThucThanhToanDTO>().ReverseMap();
             CreateMap<HoaDonChiTiet, HoaDonChiTietDTO>().ReverseMap();
             CreateMap<HoaDon, HoaDonDTO>().ReverseMap();
             CreateMap<KhachHang, KhachHangDTO>()
+               
             .ForMember(dest => dest.DiaChis, opt => opt.MapFrom(src =>
-            src.NguoiDung != null ? src.NguoiDung.DiaChis : new List<DiaChi>()))
+                src.NguoiDung != null ? src.NguoiDung.DiaChis : new List<DiaChi>()))
             .ForMember(dest => dest.Ho, opt => opt.MapFrom(src =>
                 src.NguoiDung != null && !string.IsNullOrWhiteSpace(src.NguoiDung.Ho)
                 ? src.NguoiDung.Ho : ""))
@@ -74,23 +75,23 @@ namespace API.HeThong
 
             CreateMap<Loai, LoaiDTO>().ReverseMap();
             CreateMap<Product, ProductDTO>()
-                .ForMember(t => t.ThuongHieu, opt => opt.MapFrom(src =>
+                .ForMember(t => t.NhaXuatBan, opt => opt.MapFrom(src =>
                     src.ThuongHieu != null && !string.IsNullOrWhiteSpace(src.ThuongHieu.Ten)
                     ? src.ThuongHieu.Ten : ""))
-                .ForMember(dg => dg.TheLoai, opt => opt.MapFrom(src =>
+                .ForMember(dg => dg.TacGia, opt => opt.MapFrom(src =>
                     src.TheLoai != null && !string.IsNullOrWhiteSpace(src.TheLoai.Ten)
                     ? src.TheLoai.Ten : ""))
                 .ForMember(a => a.AnhDaTai, opt => opt.MapFrom(src =>
-                    src.ChiTietMonAns != null 
-                    ? src.ChiTietMonAns
+                    src.ChiTietProduct != null 
+                    ? src.ChiTietProduct
                         .Where(ct => ct.Anhs != null && ct.TrangThai == true && ct.Anhs.Any() &&
                                         !string.IsNullOrWhiteSpace(ct.Anhs.First().DuongDan))
                         .Select(ct => ct.Anhs.First().DuongDan)
                         .FirstOrDefault() ?? ""
                     : ""))
                 .ForMember(dg => dg.Gia, opt => opt.MapFrom(src =>
-                    src.ChiTietMonAns != null
-                        ? src.ChiTietMonAns
+                    src.ChiTietProduct != null
+                        ? src.ChiTietProduct
                             .Where(ct => ct.TrangThai == true && ct.Gia > 0)
                             .Select(ct => ct.Gia)
                             .FirstOrDefault()

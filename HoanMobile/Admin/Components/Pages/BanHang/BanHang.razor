@@ -322,7 +322,7 @@
 
     private decimal DeficitAmount => CustomerPay - TotalAmount;
 
-    private List<ChiTietMonAnDTO> Products = new();
+    private List<ChiTietProductDTO> Products = new();
     private List<ProductDTO> allProducts = new();
     private List<DiaChiNhap> TinhThanh = new();
     private List<DiaChiNhap> HuyenXa = new();
@@ -427,7 +427,7 @@
     }
 
 
-    private async Task IncreaseQuantity(ChiTietMonAnDTO product)
+    private async Task IncreaseQuantity(ChiTietProductDTO product)
     {
 
         if (product.SoLuongDat >= product.Soluong)
@@ -449,7 +449,7 @@
         await SaveOrdersToStorage();
     }
 
-    private async Task DecreaseQuantity(ChiTietMonAnDTO product)
+    private async Task DecreaseQuantity(ChiTietProductDTO product)
     {
         if (product.SoLuongDat <= 1)
         {
@@ -470,7 +470,7 @@
         await SaveOrdersToStorage();
     }
 
-    private async Task RemoveProduct(ChiTietMonAnDTO product)
+    private async Task RemoveProduct(ChiTietProductDTO product)
     {
         CurrentOrder.Products.Remove(product);
         await SaveOrdersToStorage();
@@ -625,7 +625,7 @@
                 var hoadonchitiet = new HoaDonChiTietDTO()
                 {
 
-                    ChiTietMonAnId = item.Id,
+                    ChiTietProductId = item.Id,
                     HoaDonId = result2.Id,
                     Soluong = item.SoLuongDat,
                     ThanhTien  = item.Gia * item.SoLuongDat,
@@ -667,7 +667,7 @@
     }
     private bool IsProductModalVisible = false;
 
-    private async Task HandleAddProduct(ChiTietMonAnDTO item)
+    private async Task HandleAddProduct(ChiTietProductDTO item)
     {
         if (CurrentOrder == null || item == null) return;
 
@@ -683,14 +683,14 @@
         else
         {
 
-            var newProduct = new ChiTietMonAnDTO
+            var newProduct = new ChiTietProductDTO
             {
                 Id = item.Id,
                 ProductId = item.ProductId,
                 Ten = item.Ten,
-                LoaiViId = item.LoaiViId,
-                KichCoId = item.KichCoId,
+                MauSacId = item.MauSacId,
                 BoNhoTrongId = item.BoNhoTrongId,
+                NhaCungCapId = item.NhaCungCapId,
                 ChatLieuId = item.ChatLieuId,
                 Gia = item.Gia,
                 GiaGiam = item.GiaGiam,

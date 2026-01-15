@@ -463,7 +463,7 @@
         // Hiển thị modal lọc nếu có
     }
 
-    private async void ExportToExcel()
+    private async Task ExportToExcel()
     {
         await JSRuntime.InvokeVoidAsync("Swal.fire", new
         {
@@ -473,7 +473,7 @@
         });
     }
 
-    private async void ImportFromExcel()
+    private async Task ImportFromExcel()
     {
         await JSRuntime.InvokeVoidAsync("Swal.fire", new
         {

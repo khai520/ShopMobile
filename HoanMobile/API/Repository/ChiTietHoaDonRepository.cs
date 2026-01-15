@@ -18,7 +18,7 @@ namespace API.Repository
             return await _context.hoaDonChiTiets
                 .Where(hdct => hdct.HoaDonId == Id)
                 .Include(c => c.Combo)
-                .Include(ctma => ctma.ChiTietMonAn)
+                .Include(ctma => ctma.ChiTietProduct)
                 .Include(hd => hd.HoaDon)
                 .AsNoTracking()
                 .ToListAsync();

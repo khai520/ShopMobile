@@ -88,7 +88,7 @@
 						<th>Tên sản phẩm</th>
 						<th>Số lượng</th>
 						<th>Giá tiền</th>
-						<th>Kích Cỡ</th>
+						<th>Bộ Nhớ Trong</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -162,7 +162,7 @@
 						<th>Tên sản phẩm</th>
 						<th>Số lượng</th>
 						<th>Giá tiền</th>
-						<th>Kích Cỡ</th>
+						<th>Bộ Nhớ Trong</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -254,17 +254,17 @@
 			<span class="stats-percent @GetPercentageCssClass(PercentSanPhamHomNay)">@PercentSanPhamHomNay</span>
 		</div>
 		<div class="stats-card">
-			<span class="stats-icon">👟</span> Sản phẩm tuần
+			<span class="stats-icon"></span> Sản phẩm tuần
 			<span class="stats-value">@SoLuongSanPhamTuanNay</span>
 			<span class="stats-percent @GetPercentageCssClass(PercentSanPhamTuanNay)">@PercentSanPhamTuanNay</span>
 		</div>
 		<div class="stats-card">
-			<span class="stats-icon">👟</span> Sản phẩm tháng
+			<span class="stats-icon"></span> Sản phẩm tháng
 			<span class="stats-value">@SoLuongSanPhamThangNay</span>
 			<span class="stats-percent @GetPercentageCssClass(PercentSanPhamThangNay)">@PercentSanPhamThangNay</span>
 		</div>
 		<div class="stats-card">
-			<span class="stats-icon">👟</span> Sản phẩm năm
+			<span class="stats-icon"></span> Sản phẩm năm
 			<span class="stats-value">@SoLuongSanPhamNamNay</span>
 			<span class="stats-percent @GetPercentageCssClass(PercentSanPhamNamNay)">@PercentSanPhamNamNay</span>
 		</div>
@@ -276,7 +276,7 @@
 
 	private List<HoaDon> hoaDons = new List<HoaDon>();
 	private List<HoaDonChiTiet> hoaDonChiTiets = new List<HoaDonChiTiet>();
-	private List<ChiTietMonAnDTO> chitietmonAns = new List<ChiTietMonAnDTO>();
+	private List<ChiTietProductDTO> chitietmonAns = new List<ChiTietProductDTO>();
 
 	private decimal TongSoTienHomNay ;
 	private int SoLuongSanPhamHomNay ;
@@ -636,7 +636,7 @@
 
 		sanPhamBanChays = (from hd in (hoaDons ?? new List<HoaDon>())
 									join hdct in hoaDonChiTiets on hd.Id equals hdct.HoaDonId
-									join ma in chitietmonAns on hdct.ChiTietMonAnId equals ma.Id
+									join ma in chitietmonAns on hdct.ChiTietProductId equals ma.Id
 									where hd.NgayTao.Date >= startDateFilter &&
 									hd.NgayTao.Date <= endDateFilter &&
 									hd.TrangThai.Equals("hoàn thành", StringComparison.OrdinalIgnoreCase) &&

@@ -13,14 +13,14 @@ namespace API.Repository
             _context = context;
         }
 
-        public async Task<IEnumerable<ChiTietProduct>> GetMonAnId(string id)
+        public async Task<IEnumerable<ChiTietProduct>> GetProductId(string id)
         {
-            return await _context.chiTietMonAns
+            return await _context.chiTietProducts
                 .Where(x => x.ProductId == id)
                 .Include(c => c.Product)
-                .Include(c => c.BoNhoTrong)
+                .Include(c => c.MauSac)
                 .Include(c => c.ChatLieu)
-                .Include(c => c.KichCo)
+                .Include(c => c.BoNhoTrong)
                 .Include(c => c.NhaCungCap)
                 .Include(c => c.Anhs)
                 .AsNoTracking()
@@ -29,11 +29,11 @@ namespace API.Repository
 
         public async Task<IEnumerable<ChiTietProduct>> GetAll()
         {
-            return await _context.chiTietMonAns
+            return await _context.chiTietProducts
                 .Include(c => c.Product)
-                .Include(c => c.BoNhoTrong)
+                .Include(c => c.MauSac)
                 .Include(c => c.ChatLieu)
-                .Include(c => c.KichCo)
+                .Include(c => c.BoNhoTrong)
                 .Include(c => c.NhaCungCap)
                 .Include(c => c.Anhs)
                 .AsNoTracking()

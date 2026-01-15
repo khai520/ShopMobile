@@ -11,6 +11,6 @@ namespace API.Models
         public string Ten { get; set; }
         [RegularExpression(@"^[\p{L}0-9\s]+$", ErrorMessage = "Không được chứa ký tự đặc biệt")]
         public string? Mota { get; set; }
-        public virtual ICollection<ChiTietProduct> ChiTietMonAn { get; set; }
+        public virtual ICollection<ChiTietProduct> ChiTietProduct { get; set; }
     }
 }

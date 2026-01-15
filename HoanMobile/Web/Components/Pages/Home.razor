@@ -1,0 +1,102 @@
+﻿@page "/"
+@layout Layout.MainLayout
+
+@inject IJSRuntime JS
+@inject IProductService monAnService
+@inject IChiTietProductService chiTietMonAnService
+<PageTitle>Hoan Mobile</PageTitle>
+<link href="css/Home.css" rel="stylesheet" />
+
+
+<section class="hero" id="home">
+    <div class="container2">
+        <button class="cta-btn" @onclick="ScrollToProducts">Khám phá ngay! ✨</button>
+    </div>
+</section>
+
+<section class="products" id="products">
+    <div class="container">
+        <h2 class="section-title">📖 Sản phẩm Nổi Bật 📖</h2>
+        <div class="product-grid">
+            @foreach (var item in MonAns)
+            {
+                <Web.Components.Pages.SanPham.SanPham monAn="item"/>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="container">
+        <h2 class="section-title">✨ Tại sao chọn Hoan Mobile? ✨</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🚚</div>
+                <h3>Giao hàng nhanh</h3>
+                <p>Miễn phí vận chuyển cho đơn hàng trên 200.000₫</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">✅</div>
+                <h3>Điện thoại chính hãng</h3>
+                <p>100% điện thoại chính hãng, bản quyền rõ ràng</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Giá tốt nhất</h3>
+                <p>Giá cả cạnh tranh với nhiều ưu đãi hấp dẫn</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎁</div>
+                <h3>Quà tặng đặc biệt</h3>
+                <p>Tai nghe và sạc pin miễn phí cho mọi đơn hàng</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+@code {
+    [Inject] NavigationManager Navigation { get; set; }
+    public List<ProductDTO> MonAns = new();
+    private bool _hasInitialized = false;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        if (firstRender && !_hasInitialized)
+        {
+            await JS.InvokeVoidAsync("localStorage.removeItem", "checkoutItems");
+            await JS.InvokeVoidAsync("localStorage.removeItem", "pendingOrder");
+            _hasInitialized = true;
+            StateHasChanged();
+        }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        
+        var monAns = await monAnService.GetAll() ?? new();
+        var ctma = await chiTietMonAnService.GetAll() ?? new();
+
+
+        MonAns = monAns
+            .Where(mon => mon.TrangThai == true &&
+                        ctma.Any(c => c.ProductId == mon.Id
+                                    && c.TrangThai == true
+                                    && c.Soluong > 0)).Take(5)
+            .ToList();
+    }
+
+
+
+    private void ToggleCart()
+    {
+        
+    }
+
+    private async Task ScrollToProducts()
+    {
+        Console.WriteLine("Test");
+        await JS.InvokeVoidAsync("document.getElementById", "products");
+    }
+
+}

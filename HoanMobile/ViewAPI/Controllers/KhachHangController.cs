@@ -5,7 +5,10 @@ using API.Models;
 using API.Models.DTO;
 using API.Repository.IRepository;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace ViewAPI.Controllers
 {
@@ -28,5 +31,6 @@ namespace ViewAPI.Controllers
             var dto = _mapper.Map<IEnumerable<KhachHangDTO>>(result);
             return Ok(dto);
         }
+
     }
 }

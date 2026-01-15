@@ -18,7 +18,7 @@ namespace API.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
-            optionsBuilder.UseSqlServer(@"Data Source=.;Initial Catalog=Jolly;Trusted_Connection=True;Integrated Security=True;TrustServerCertificate=True");
+            optionsBuilder.UseSqlServer(@"Data Source=.;Initial Catalog=MobileWeb;Trusted_Connection=True;Integrated Security=True;TrustServerCertificate=True");
 
             //string dbFilePath = "dbconfig.txt";
             //string Dbcheck = "check.txt";
@@ -78,9 +78,9 @@ namespace API.Data
                 .HasForeignKey(nv => nv.ChucVuId);
 
             modelBuilder.Entity<Anh>()
-                .HasOne(a => a.ChiTietMonAn)
+                .HasOne(a => a.ChiTietProduct)
                 .WithMany(c => c.Anhs)
-                .HasForeignKey(a => a.ChiTietMonAnId)
+                .HasForeignKey(a => a.ChiTietProductId)
                 .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<ChiTietProduct>()
                  .Property(c => c.Gia)
@@ -122,10 +122,10 @@ namespace API.Data
         public DbSet<Combo> combos { get; set; }
         public DbSet<ChiTietCombo> chiTietCombos { get; set; }
         public DbSet<ChiTietGiamGia> chiTietGiamGias { get; set; }
-        public DbSet<ChiTietProduct> chiTietMonAns { get; set; }
+        public DbSet<ChiTietProduct> chiTietProducts { get; set; }
         public DbSet<ChucVu> chucVus { get; set; }
         public DbSet<DiaChi> diaChis { get; set; }
-        public DbSet<ChatLieu> dongGois { get; set; }
+        public DbSet<ChatLieu> chatLieus { get; set; }
         public DbSet<GiamGia> giamGias { get; set; }
         public DbSet<GioHang> gioHangs { get; set; }
         public DbSet<HinhThucThanhToan> hinhThucThanhToans { get; set; }
@@ -133,15 +133,15 @@ namespace API.Data
         public DbSet<HoaDonChiTiet> hoaDonChiTiets { get; set; }
         public DbSet<KhachHang> khachHangs { get; set; }
         public DbSet<Loai> loais { get; set; }
-        public DbSet<Product> monAns { get; set; }
+        public DbSet<Product> products { get; set; }
         public DbSet<NguoiDung> nguoiDungs { get; set; }
         public DbSet<NhaCungCap> nhaCungCaps { get; set; }
         public DbSet<NhanVien> nhanViens { get; set; }
         public DbSet<TaiKhoan>taiKhoans { get; set; }
-        public DbSet<TheLoai> theLoais { get; set; }
-        public DbSet<ThuongHieu> thuongHieus { get; set; }
+        public DbSet<TheLoai> tacGias { get; set; }
+        public DbSet<ThuongHieu> nhaXuatBans { get; set; }
         public DbSet<LichSuTrangThai> trangThais { get; set; }
-        public DbSet<BoNhoTrong> LoaiVis { get; set; }
-        public DbSet<KichCo> KichCos { get; set; }
+        public DbSet<MauSac> theLoais { get; set; }
+        public DbSet<BoNhoTrong> KichCos { get; set; }
     }
 }

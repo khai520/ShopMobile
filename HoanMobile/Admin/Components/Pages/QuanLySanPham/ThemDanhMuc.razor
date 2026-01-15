@@ -5,7 +5,7 @@
 {
     <div class="modal-overlay">
         <div class="modal-box">
-            <h4>Thêm mới @(modalType == "bonhotrong" ? "Thể loại" : modalType == "kichco" ? "Thương Hiệu" : modalType == "nhacungcap" ? "Nhà Cung Cấp" : "Chất Liệu")</h4>
+            <h4>Thêm mới @(modalType == "Màu Sắc" ? "Màu Sắc" : modalType == "Bộ Nhớ Trong" ? "Bộ Nhớ Trong" : modalType == "Nhà Cung Cấp" ? "Nhà Cung Cấp" : modalType == "Thương Hiệu" ?"Thương Hiệu" : modalType == "Thể Loại"? "Thể Loại" : "Chất Liệu")</h4>
             @if (showSuccessMessage)
             {
                 <div class="success-message">@successMessage</div>
@@ -61,21 +61,29 @@
         {
             switch (modalType)
             {
-                case "bonhotrong":
-                    var newBoNhoTrong = new BoNhoTrong { Ten = newItemTen, Mota = newItemMota };
-                    await apiService.PostAsync<BoNhoTrong, BoNhoTrong>("BoNhoTrong", newBoNhoTrong);
+                case "Màu Sắc":
+                    var newBoNhoTrong = new MauSac { Ten = newItemTen, Mota = newItemMota };
+                    await apiService.PostAsync<MauSac, MauSac>("MauSac", newBoNhoTrong);
                     break;
-                case "kichco":
-                    var newKichCo = new KichCo {Ten = newItemTen, Mota = newItemMota };
-                    await apiService.PostAsync<KichCo, KichCo>("KichCo", newKichCo);
+                case "Bộ Nhớ Trong":
+                    var newKichCo = new BoNhoTrong {Ten = newItemTen, Mota = newItemMota };
+                    await apiService.PostAsync<BoNhoTrong, BoNhoTrong>("BoNhoTrong", newKichCo);
                     break;
-                case "nhacungcap":
+                case "Nhà Cung Cấp":
                     var newNCC = new NhaCungCap { Ten = newItemTen, Mota = newItemMota };
                     await apiService.PostAsync<NhaCungCap, NhaCungCap>("NhaCungCap", newNCC);
                     break;
-                case "chatlieu":
+                case "Chất Liệu":
                     var newChatLieu = new ChatLieu { Id = id, Ten = newItemTen, Mota = newItemMota };
-                    await apiService.PutAsync<ChatLieu>("ChatLieu", newChatLieu);
+                    await apiService.PostAsync<ChatLieu , ChatLieu>("ChatLieu", newChatLieu);
+                    break;
+                case "Thương Hiệu":
+                    var newThuongHieu = new ThuongHieu { Id = id, Ten = newItemTen, Mota = newItemMota };
+                    await apiService.PostAsync<ThuongHieu, ThuongHieu>("ThuongHieu", newThuongHieu);
+                    break;
+                case "Thể Loại":
+                    var newTheLoai = new TheLoai { Id = id, Ten = newItemTen, Mota = newItemMota };
+                    await apiService.PostAsync<TheLoai, TheLoai>("ChatLieu", newTheLoai);
                     break;
             }
         } 
@@ -94,21 +102,29 @@
             {
                 switch (modalType)
                 {
-                    case "bonhotrong":
-                        var newBoNhoTrong = new BoNhoTrong { Ten = newItemTen, Mota = newItemMota };
-                        await apiService.PostAsync<BoNhoTrong, BoNhoTrong>("BoNhoTrong", newBoNhoTrong);
+                    case "Màu Sắc":
+                        var newBoNhoTrong = new MauSac { Ten = newItemTen, Mota = newItemMota };
+                        await apiService.PutAsync<MauSac>("MauSac", newBoNhoTrong);
                         break;
-                    case "kichco":
-                        var newKichCo = new KichCo { Ten = newItemTen, Mota = newItemMota };
-                        await apiService.PostAsync<KichCo, KichCo>("KichCo", newKichCo);
+                    case "Bộ Nhớ Trong":
+                        var newKichCo = new BoNhoTrong { Ten = newItemTen, Mota = newItemMota };
+                        await apiService.PutAsync<BoNhoTrong>("BoNhoTrong", newKichCo);
                         break;
-                    case "nhacungcap":
+                    case "Nhà Cung Cấp":
                         var newNCC = new NhaCungCap { Id = id, Ten = newItemTen, Mota = newItemMota };
                         await apiService.PutAsync<NhaCungCap>("NhaCungCap", newNCC);
                         break;
-                    case "chatlieu":
+                    case "Chất Liệu":
                         var newChatLieu = new ChatLieu { Id = id, Ten = newItemTen, Mota = newItemMota };
                         await apiService.PutAsync<ChatLieu>("ChatLieu", newChatLieu);
+                        break;
+                    case "Thương Hiệu":
+                        var newThuongHieu = new ThuongHieu { Id = id, Ten = newItemTen, Mota = newItemMota };
+                        await apiService.PutAsync<ThuongHieu>("ThuongHieu", newThuongHieu);
+                        break;
+                    case "Thể Loại":
+                        var newTheLoai = new TheLoai { Id = id, Ten = newItemTen, Mota = newItemMota };
+                        await apiService.PutAsync<TheLoai>("ChatLieu", newTheLoai);
                         break;
                 }
             }

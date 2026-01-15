@@ -5,8 +5,8 @@ namespace Admin.Service.IService
 {
     public interface IChiTietProductService : IApiService
     {
-        Task<List<ChiTietMonAnDTO>> GetChiTiet(string Id);
-        Task<List<ChiTietMonAnDTO>> GetAll();
+        Task<List<ChiTietProductDTO>> GetChiTiet(string Id);
+        Task<List<ChiTietProductDTO>> GetAll();
 
     }
 }

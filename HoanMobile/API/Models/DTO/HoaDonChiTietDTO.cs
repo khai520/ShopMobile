@@ -9,7 +9,7 @@ namespace API.Models.DTO
         public bool TrangThai { get; set; } = true;
         public decimal ThanhTien { get; set; }
         public string HoaDonId { get; set; }
-        public Guid? ChiTietMonAnId { get; set; }
+        public Guid? ChiTietProductId { get; set; }
         public string? ComboId { get; set; }
     }
 }

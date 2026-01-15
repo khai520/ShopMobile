@@ -20,6 +20,6 @@ namespace API.Models
         public virtual ThuongHieu? ThuongHieu { get; set; }
         public virtual TheLoai? TheLoai { get; set; }
         [JsonIgnore]
-        public virtual ICollection<ChiTietProduct>? ChiTietMonAns { get; set; }
+        public virtual ICollection<ChiTietProduct>? ChiTietProduct { get; set; }
     }
 }

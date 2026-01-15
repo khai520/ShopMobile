@@ -10,10 +10,10 @@ namespace API.Models
         public string DuongDan { get; set; }
         public bool TrangThai { get; set; } = true;
         public Guid? NguoiDungId { get; set; }
-        public Guid? ChiTietMonAnId { get; set; }
+        public Guid? ChiTietProductId { get; set; }
 
 
-        public virtual ChiTietProduct? ChiTietMonAn { get; set; }
+        public virtual ChiTietProduct? ChiTietProduct { get; set; }
         public virtual NguoiDung? NguoiDung { get; set; }
     }
 }

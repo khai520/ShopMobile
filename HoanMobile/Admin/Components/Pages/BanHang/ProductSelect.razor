@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="filter-item">
-                    <label class="filter-label">Bộ nhớ trong:</label>
+                    <label class="filter-label">Thể loại:</label>
                     <select @bind="selectedBoNhoTrong" class="filter-select">
                         <option value="" selected></option>
                         @foreach (var lv in allBoNhoTrong)
@@ -42,7 +42,7 @@
 
                 <div class="filter-item">
                     <label class="filter-label">Tìm Kiếm:</label>
-                    <input type="text" placeholder="Nhập tên món ăn..." @bind="searchText" @bind:event="oninput" class="filter-input" />
+                    <input type="text" placeholder="Nhập tên sản phẩm..." @bind="searchText" @bind:event="oninput" class="filter-input" />
                 </div>
             </div>
 
@@ -60,9 +60,9 @@
                             <div class="product-select-item">
                                 <img src="@(product.DanhSachAnh?.FirstOrDefault()?.DuongDan ?? "")" class="order-img" alt="@product.Ten" />
                                 <div class="item-info">
-                                    <div class="order-size">Vị: <strong>@product.BoNhoTrong</strong></div>
+                                    <div class="order-size">Loại: <strong>@product.TheLoai</strong></div>
                                     <div class="order-size">Cỡ: <strong>@product.KichCo</strong></div>
-                                    <div class="order-size">Nguyên Liệu: <strong>@product.ChatLieu</strong></div>
+                                    <div class="order-size">Chất Liệu: <strong>@product.ChatLieu</strong></div>
                                     <div class="order-price">Giá: <strong>@FormatMoney(product.Gia)</strong></div>
                                 </div>
                                 <div class="order-qty">
@@ -89,10 +89,10 @@
 
 @code {
     [Parameter] public bool Visible { get; set; }
-    [Parameter] public EventCallback<ChiTietMonAnDTO> OnAddProduct { get; set; }
+    [Parameter] public EventCallback<ChiTietProductDTO> OnAddProduct { get; set; }
     [Parameter] public EventCallback OnClose { get; set; }
     private List<ProductDTO> allProducts = new();
-    private List<ChiTietMonAnDTO> Products = new();
+    private List<ChiTietProductDTO> Products = new();
     private string selectedDongGoi = string.Empty;
     private List<string> allDongGoi = new();
 
@@ -110,7 +110,7 @@
                                 .Where(s => !string.IsNullOrWhiteSpace(s))
                                 .Distinct().OrderBy(s => s).ToList();
 
-        allBoNhoTrong = Products.Select(p => p.BoNhoTrong)
+        allBoNhoTrong = Products.Select(p => p.TheLoai)
                             .Where(s => !string.IsNullOrWhiteSpace(s))
                             .Distinct().OrderBy(s => s).ToList();
 
@@ -120,7 +120,7 @@
     }
 
 
-    private async void ChangeQty(ChiTietMonAnDTO g, int delta)
+    private async void ChangeQty(ChiTietProductDTO g, int delta)
     {
 
         if (delta < 0 && g.SoLuongDat <= 1)
@@ -163,7 +163,7 @@
 
 
 
-    private async Task AddToOrder(ChiTietMonAnDTO item)
+    private async Task AddToOrder(ChiTietProductDTO item)
     {
         await OnAddProduct.InvokeAsync(item);
         await OnClose.InvokeAsync();
@@ -189,11 +189,11 @@
 
 
 
-    private bool IsMatchAllFilters(ChiTietMonAnDTO p)
+    private bool IsMatchAllFilters(ChiTietProductDTO p)
     {
         bool matchKichCo = string.IsNullOrWhiteSpace(selectedKichCo) || p.KichCo == selectedKichCo;
         bool matchNguyenLieu = string.IsNullOrWhiteSpace(selectedChatLieu) || p.ChatLieu == selectedChatLieu;
-        bool matchLoaiVi = string.IsNullOrWhiteSpace(selectedBoNhoTrong) || p.BoNhoTrong == selectedBoNhoTrong;
+        bool matchLoaiVi = string.IsNullOrWhiteSpace(selectedBoNhoTrong) || p.TheLoai == selectedBoNhoTrong;
         bool matchSearch = string.IsNullOrWhiteSpace(searchText) || (p.Ten?.Contains(searchText, StringComparison.OrdinalIgnoreCase) ?? false);
 
         return matchKichCo && matchNguyenLieu && matchLoaiVi && matchSearch;

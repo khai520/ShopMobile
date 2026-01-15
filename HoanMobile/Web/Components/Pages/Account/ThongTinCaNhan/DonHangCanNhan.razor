@@ -1,0 +1,254 @@
+﻿@page "/donhang"
+@inject IApiService ApiService
+@inject IHoaDonService HoaDonService
+@inject IHoaDonChiTietService ChiTietHoaDonService
+@inject IChiTietProductService GetChiTietMonAnService
+@inject IJSRuntime JS
+<link href="css/DonHang.css" rel="stylesheet" />
+<h2>Đơn hàng của tôi</h2>
+
+<div class="tabs">
+    @foreach (var tt in TrangThaiList)
+    {
+        <button class="@(TrangThai == tt ? "active" : "")"
+                @onclick="() => LocTheoTrangThai(tt)">
+            @tt
+        </button>
+    }
+</div>
+
+<table class="table-auto w-full">
+    <thead>
+        <tr>
+            <th>Mã đơn</th>
+            <th>Ngày đặt</th>
+            <th>Tổng tiền</th>
+            <th>Trạng thái</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var hd in DanhSachHoaDon)
+        {
+            <tr>
+                <td>@hd.Id</td>
+                <td>@hd.NgayTao.ToString("dd/MM/yyyy")</td>
+                <td>@hd.TongTien.ToString("N0") đ</td>
+                <td>
+                    <span class="badge @(hd.TrangThai)">
+                        @hd.TrangThai
+                    </span>
+                </td>
+                <td>
+                    <button @onclick="() => XemChiTiet(hd.Id)">Xem</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (showHistory)
+{
+    <div class="modal-overlay">
+        <div class="modal1">
+            <!-- Header -->
+            <div class="modal-header">
+                <h3>Chi tiết đơn hàng #@selectedHoaDon?.Id</h3>
+            </div>
+
+            <!-- Thông tin đơn hàng -->
+            <div class="order-info-grid">
+                <div class="info-card">
+                    <h4>Khách hàng</h4>
+                    <div class="info-value">
+                        @(string.IsNullOrWhiteSpace(selectedHoaDon?.KhachHang?.NguoiDung?.Ten)
+                                            ? "Khách lẻ"
+                                            : selectedHoaDon.KhachHang.NguoiDung.Ten)
+                    </div>
+                    <div class="info-secondary">
+                        @(selectedHoaDon?.KhachHang != null
+                                            ? "Khách hàng thành viên"
+                                            : "Khách vãng lai")
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h4>Ngày đặt</h4>
+                    <div class="info-value">@selectedHoaDon?.NgayTao.ToString("dd/MM/yyyy")</div>
+                    <div class="info-secondary">@selectedHoaDon?.NgayTao.ToString("HH:mm")</div>
+                </div>
+
+                <div class="info-card">
+                    <h4>Loại đơn hàng</h4>
+                    <div class="info-value">@selectedHoaDon?.LoaiHoaDon</div>
+                    <div class="info-secondary">
+                        @(selectedHoaDon?.LoaiHoaDon == "Online" ? "Đặt hàng trực tuyến" : "Tại quầy")
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h4>Trạng thái</h4>
+                    <div class="info-value">
+                        <span class="badge @(GetBadgeClass(selectedHoaDon?.TrangThai))">
+                            @selectedHoaDon?.TrangThai
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="total-summary">
+                <div class="total-amount">@selectedHoaDon?.TongTien.ToString("N0") đ</div>
+                <div class="total-label">Tổng giá trị đơn hàng</div>
+            </div>
+
+            @if (selectedChiTiet?.Any() == true)
+            {
+                var tongSoMon = selectedChiTiet.Sum(ct => ct.Soluong);
+                <h4 class="section-title">Chi tiết món ăn (@tongSoMon món)</h4>
+                <div class="items-list">
+                    @foreach (var chiTiet in MonAnTheoLichSu.Values.SelectMany(x => x))
+                    {
+
+                        <div class="item-row">
+                            <img src="@(string.IsNullOrEmpty(chiTiet.DanhSachAnh?.FirstOrDefault()?.DuongDan)
+                                                                                          ? "/images/default-food.jpg"
+                                                                                          : chiTiet.DanhSachAnh.First().DuongDan)"
+                                 alt="@chiTiet.ProductId"
+                                 class="item-image" />
+
+                            <div class="item-info item-info-badges">
+                                <div class="item-name">@chiTiet.Ten</div>
+                                <div class="item-name">@chiTiet.TheLoai</div>
+                                <div class="item-name">@chiTiet.KichCo</div>
+                                <div class="item-name">@chiTiet.ChatLieu</div>
+                                <div class="item-details">@chiTiet.Mota</div>
+                            </div>
+
+                            <div class="item-quantity">x @chiTiet.SoLuongDat</div>
+                            <div class="item-price">@chiTiet.Gia.ToString("N0") đ</div>
+                        </div>
+                    }
+
+
+
+
+                </div>
+            }
+
+
+            <h4 class="section-title">Lịch sử trạng thái</h4>
+            @if (selectedLichSu?.Any() == true)
+            {
+                <div class="history-timeline">
+                    @foreach (var lichSu in selectedLichSu.OrderByDescending(ls => ls.ThoiGian))
+                    {
+                        <div class="history-item">
+                            <div class="history-status">@lichSu.TrangThai</div>
+                            <div class="history-time">@lichSu.ThoiGian.ToString("dd/MM/yyyy - HH:mm")</div>
+                            @if (!string.IsNullOrEmpty(lichSu.LyDo))
+                            {
+                                <div class="history-reason">@lichSu.LyDo</div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="empty-state">
+                    <div style="font-size: 48px; color: #dee2e6; margin-bottom: 16px;">📋</div>
+                    <p>Chưa có lịch sử trạng thái</p>
+                </div>
+            }
+
+            <button class="btn-close1" @onclick="() => showHistory = false">Đóng</button>
+        </div>
+    </div>
+}
+@code {
+    private List<HoaDonChiTietDTO> selectedChiTiet;
+    private List<HoaDon> DanhSachHoaDon = new();
+    private string TrangThai;
+
+    private readonly List<string> TrangThaiList = new()
+    {
+        "TẤT CẢ", "Chờ xác nhận", "Chờ giao", "Vận chuyển", "Đã giao", "Đã thanh toán", "hoàn thành", "Đã huỷ"
+    };
+    private bool _hasInitialized = false;
+    private string? Id = "";
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        if (firstRender && !_hasInitialized)
+        {
+
+            Id = await JS.InvokeAsync<string>("localStorage.getItem", "KhachHangId");
+
+            _hasInitialized = true;
+            StateHasChanged();
+        }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await TaiLai();
+    }
+
+    private async Task TaiLai()
+    {
+        var hoadon = await ApiService.GetAsync<List<HoaDon>>("HoaDon");
+        DanhSachHoaDon = hoadon.Where(x => x.KhachHangId == Id).ToList();
+
+        if (!string.IsNullOrEmpty(TrangThai) && TrangThai != "TẤT CẢ")
+        {
+            DanhSachHoaDon = DanhSachHoaDon
+                .Where(hd => hd.TrangThai == TrangThai )
+                .ToList();
+        }
+    }
+
+    private async Task LocTheoTrangThai(string tt)
+    {
+        TrangThai = tt;
+        await TaiLai();
+    }
+    private bool showHistory = false;
+    private HoaDon selectedHoaDon;
+    private List<LichSuTrangThai> selectedLichSu = new();
+    private Dictionary<Guid, List<ChiTietProductDTO>> MonAnTheoLichSu = new();
+    private async Task XemChiTiet(string hoaDonId)
+    {
+        selectedHoaDon = DanhSachHoaDon.FirstOrDefault(x => x.Id == hoaDonId);
+
+        selectedLichSu = (await HoaDonService.GetLichSu(hoaDonId))
+                            ?.OrderByDescending(ls => ls.ThoiGian)
+                            .ToList() ?? new();
+
+        selectedChiTiet = await ChiTietHoaDonService.GetChiTiet(hoaDonId);
+        var chiTietMonAnList = await GetChiTietMonAnService.GetAll();
+
+        MonAnTheoLichSu.Clear();
+
+        foreach (var hoaDonCt in selectedChiTiet)
+        {
+            var chiTietMonAn = chiTietMonAnList.FirstOrDefault(ct => ct.Id == hoaDonCt.ChiTietProductId);
+            if (chiTietMonAn == null) continue;
+
+            chiTietMonAn.SoLuongDat = hoaDonCt.Soluong;
+
+            MonAnTheoLichSu[hoaDonCt.Id] = new List<ChiTietProductDTO> { chiTietMonAn };
+        }
+
+        showHistory = true;
+    }
+    private string GetBadgeClass(string status) => status switch
+    {
+        "hoàn thành" => "badge-purple",
+        "Chờ xác nhận" => "badge-blue",
+        "Chờ giao" => "badge-orange",
+        "Vận chuyển" => "badge-blue",
+        "Đã giao" => "badge-green",
+        "Đã thanh toán" => "badge-green",
+        "Đã huỷ" => "badge-red",
+        _ => "badge-gray"
+    };
+}
