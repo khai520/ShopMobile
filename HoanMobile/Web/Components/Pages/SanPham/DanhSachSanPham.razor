@@ -44,8 +44,17 @@
 
                     <div class="filter-group">
                         <label>💰 Mức giá</label>
-                        <input type="range" min="@minPrice" max="@maxPrice" step="5000" @bind="priceFilter" @oninput="OnPriceChange" />
-                        <span id="priceLabel">Tối đa: @(priceFilter.ToString("N0"))₫</span>
+                        <input type="range"
+                               min="@minPrice"
+                               max="@maxPrice"
+                               step="@priceStep"
+                               @bind="priceFilter"
+                               @oninput="OnPriceChange" />
+
+                        <span>
+                            Tối đa: @priceFilter.ToString("N0") ₫
+                        </span>
+
                     </div>
                 </aside>
 
@@ -85,6 +94,7 @@
     private decimal priceFilter = 100000;
     private decimal minPrice = 10000;
     private decimal maxPrice = 500000;
+    private decimal priceStep = 10000;
 
     // Filter options
     private List<string> categories = new();
@@ -101,28 +111,45 @@
         var monAns = await monAnService.GetAll() ?? new();
         var ctma = await chiTietMonAnService.GetAll() ?? new();
 
-
         products = monAns
             .Where(mon => mon.TrangThai == true &&
-                        ctma.Any(c => c.ProductId == mon.Id 
-                                    && c.TrangThai == true 
-                                    && c.Soluong > 0))
+                ctma.Any(c => c.ProductId == mon.Id
+                           && c.TrangThai == true
+                           && c.Soluong > 0))
             .ToList();
+
+        if (!products.Any())
+            return;
+
+        minPrice = products.Min(x => x.Gia);
+        maxPrice = products.Max(x => x.Gia);
+        priceFilter = maxPrice;
+
+        priceStep = GetPriceStep(maxPrice);
 
         InitializeFilterOptions();
         ApplyFilters();
     }
+    private decimal GetPriceStep(decimal maxPrice)
+    {
+        if (maxPrice >= 100_000_000) return 5_000_000;   
+        if (maxPrice >= 10_000_000) return 1_000_000;   
+        if (maxPrice >= 5_000_000) return 500_000;     
+        if (maxPrice >= 1_000_000) return 100_000;     
+        return 10_000;                                  
+    }
+
 
     private void InitializeFilterOptions()
     {
-        categories = products.Where(p => !string.IsNullOrEmpty(p.TacGia))
-                           .Select(p => p.TacGia!)
+        categories = products.Where(p => !string.IsNullOrEmpty(p.TheLoai))
+                           .Select(p => p.TheLoai!)
                            .Distinct()
                            .OrderBy(c => c)
                            .ToList();
 
-        brands = products.Where(p => !string.IsNullOrEmpty(p.NhaXuatBan))
-                        .Select(p => p.NhaXuatBan!)
+        brands = products.Where(p => !string.IsNullOrEmpty(p.ThuongHieu))
+                        .Select(p => p.ThuongHieu!)
                         .Distinct()
                         .OrderBy(b => b)
                         .ToList();
@@ -138,11 +165,11 @@
                 return false;
 
             if (!string.IsNullOrEmpty(selectedCategory) &&
-                product.TacGia != selectedCategory)
+                product.TheLoai != selectedCategory)
                 return false;
 
             if (!string.IsNullOrEmpty(selectedBrand) &&
-                product.NhaXuatBan != selectedBrand)
+                product.ThuongHieu != selectedBrand)
                 return false;
 
             if (product.Gia > priceFilter)

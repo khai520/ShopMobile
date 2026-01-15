@@ -75,10 +75,10 @@ namespace API.HeThong
 
             CreateMap<Loai, LoaiDTO>().ReverseMap();
             CreateMap<Product, ProductDTO>()
-                .ForMember(t => t.NhaXuatBan, opt => opt.MapFrom(src =>
+                .ForMember(t => t.ThuongHieu, opt => opt.MapFrom(src =>
                     src.ThuongHieu != null && !string.IsNullOrWhiteSpace(src.ThuongHieu.Ten)
                     ? src.ThuongHieu.Ten : ""))
-                .ForMember(dg => dg.TacGia, opt => opt.MapFrom(src =>
+                .ForMember(dg => dg.TheLoai, opt => opt.MapFrom(src =>
                     src.TheLoai != null && !string.IsNullOrWhiteSpace(src.TheLoai.Ten)
                     ? src.TheLoai.Ten : ""))
                 .ForMember(a => a.AnhDaTai, opt => opt.MapFrom(src =>

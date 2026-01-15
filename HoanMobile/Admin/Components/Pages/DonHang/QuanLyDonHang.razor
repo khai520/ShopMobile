@@ -327,6 +327,9 @@
 
         var hoaDon = await ApiService.GetbyId<HoaDon, string>(hoaDonId, "HoaDon");
         if (hoaDon == null) return;
+        var lichSuTrangThai = await HoaDonService.GetLichSu(hoaDonId);
+        bool daThanhToanTruocDo = lichSuTrangThai
+            ?.Any(ls => ls.TrangThai == "Đã thanh toán") == true;
 
         selectedChiTiet = await ChiTietHoaDonService.GetChiTiet(hoaDonId);
 
@@ -367,9 +370,21 @@
                 }
             }
         }
+        
 
 
-        hoaDon.TrangThai = trangThaiMoi;
+
+        if (trangThaiMoi == "Đã giao" && daThanhToanTruocDo)
+        {
+            hoaDon.TrangThai = "hoàn thành";
+            trangThaiMoi = "hoàn thành"; 
+        }
+        else
+        {
+            hoaDon.TrangThai = trangThaiMoi;
+        }
+
+
         await ApiService.PutAsync("HoaDon", hoaDon);
 
         foreach (var item in selectedChiTiet)

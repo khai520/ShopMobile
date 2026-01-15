@@ -403,6 +403,7 @@
     private string GetVoucherStatus(Voucher voucher)
     {
         if (!voucher.TrangThai) return "draft";
+        if (DateTime.Now.ToLocalTime() < voucher.NgayBatDau) return "cbi";
         if (voucher.NgayKetThuc < DateTime.Now.ToLocalTime()) return "expired";
         return "active";
     }
@@ -413,6 +414,7 @@
         {
             "active" => "bg-green-100 text-green-800",
             "expired" => "bg-red-100 text-red-800",
+            "cbi" => "",
             "draft" => "bg-gray-100 text-gray-800",
             _ => "bg-gray-100 text-gray-800"
         };
@@ -424,6 +426,7 @@
         {
             "active" => "Hoạt động",
             "expired" => "Hết hạn",
+            "cbi" => "Chuẩn bị",
             "draft" => "Nháp",
             _ => "Không xác định"
         };

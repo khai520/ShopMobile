@@ -77,11 +77,6 @@
             <br />
             <InputNumber @bind-Value="chiTietMoi.Gia" placeholder="Giá" @attributes="@(new Dictionary<string, object> { { "min", "0" } })" />
         </div>
-        <div>
-            Số trang sách
-            <br />
-            <InputNumber @bind-Value="chiTietMoi.SoTrang" placeholder="Số trang sách" @attributes="@(new Dictionary<string, object> { { "min", "0" } })" />
-        </div>
 
         @if (ShowStatus)
         {
@@ -160,7 +155,7 @@
                     <th>Chất liệu</th>
                     <th>Số lượng</th>
                     <th>Giá</th>
-                    <th>Số trang sách</th>
+
                     @if (ShowDescription)
                     {
                         <th>Mô tả</th>
@@ -203,17 +198,6 @@
                                 @ct.Gia
                             }
                         </td>
-                        <td>
-                            @if (AllowEditInTable)
-                            {
-                                <InputNumber @bind-Value="@ct.SoTrang" placeholder="Số trang sách"
-                                             @attributes="@(new Dictionary<string, object> { { "min", "0" } })" />
-                            }
-                            else
-                            {
-                                @ct.SoTrang
-                            }
-                        </td>
                         @if (ShowDescription)
                         {
                             <td>@ct.Mota</td>
@@ -250,23 +234,27 @@
     }
 </div>
 
-@if (ShowStatus)
-        {
+@if (showModal)
+{
     <div class="modal-overlay">
         <div class="modal-box">
             <h4>Thêm mới @modalType</h4>
+
             @if (showSuccessMessage)
             {
-                <div class="success-message">@successMessage</div> 
+                <div class="success-message">@successMessage</div>
             }
+
             <div class="form-group">
                 <label>Tên</label>
                 <InputText @bind-Value="newItemTen" class="form-control" />
             </div>
+
             <div class="form-group">
                 <label>Mô tả</label>
                 <InputTextArea @bind-Value="newItemMota" class="form-control" rows="3" />
             </div>
+
             <div class="text-end">
                 <button class="btn btn-secondary" @onclick="CloseModal">Hủy</button>
                 <button class="btn btn-primary" @onclick="ConfirmAddNewItem">Thêm</button>
@@ -274,6 +262,7 @@
         </div>
     </div>
 }
+
 
 @code {
     // Parameters - có thể tùy chỉnh từ component cha

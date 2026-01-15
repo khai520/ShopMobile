@@ -213,7 +213,7 @@
     private List<ThuongHieu> thuongHieusList = new();
     private async Task LoadDropdownData()
     {
-        theLoaisList = await apiService.GetAsync<List<TheLoai>>("MauSac") ?? new();
+        theLoaisList = await apiService.GetAsync<List<TheLoai>>("TheLoai") ?? new();
         thuongHieusList = await apiService.GetAsync<List<ThuongHieu>>("ThuongHieu") ?? new();
         StateHasChanged();
     }

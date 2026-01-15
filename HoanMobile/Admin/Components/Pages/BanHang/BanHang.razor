@@ -520,7 +520,7 @@
     private async void ConfirmOrder()
     {
 
-        if (CurrentOrder.Customer != null && CurrentOrder.ThongTinHoaDon.IsDelivery)
+        if (CurrentOrder.Customer == null && CurrentOrder.ThongTinHoaDon.IsDelivery)
         {
             var nguoidung = new NguoiDungDTO()
             {
@@ -558,6 +558,7 @@
                     NguoiDungId = result.Id,
 
                 };
+
                 var result3 = await apiService.PostAsync<KhachHang, KhachHang>("KhachHang", _mapper.Map<KhachHang>(khachhang));
                 if (result3 != null)
                 {

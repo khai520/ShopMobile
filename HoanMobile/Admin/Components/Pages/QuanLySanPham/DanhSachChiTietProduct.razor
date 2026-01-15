@@ -56,8 +56,8 @@
                                     <label for="theloai">Thể Loại</label>
                                     <div class="select-with-add row-layout ">
 
-                                        <InputSelect id="theloai" @bind-Value="product.TacGiaId">
-                                            @if(product.TacGia == null)
+                                        <InputSelect id="theloai" @bind-Value="product.TheLoaiId">
+                                            @if(product.TheLoai == null)
                                             {
                                                 <option selected value="">-- Thể Loại --</option>
                                             }
@@ -68,7 +68,7 @@
                                             
                                             @foreach (var item in theLoaisList)
                                             {
-                                                if (item.Id == product.TacGiaId)
+                                                if (item.Id == product.TheLoaiId)
                                                 {
                                                     <option selected value="@item.Id">@item.Ten</option>
                                                 }
@@ -86,8 +86,8 @@
                                     <label for="thuonghieu">Thương Hiệu</label>
                                     <div class="select-with-add row-layout ">
 
-                                        <InputSelect id="thuonghieu" @bind-Value="product.NhaXuatBanId">
-                                            @if (product.NhaXuatBan == null)
+                                        <InputSelect id="thuonghieu" @bind-Value="product.ThuongHieuId">
+                                            @if (product.ThuongHieu == null)
                                             {
                                                 <option selected value="">-- Thương Hiệu --</option>
                                             }
@@ -97,7 +97,7 @@
                                             }
                                             @foreach (var item in thuongHieusList)
                                             {
-                                                if (item.Id == product.NhaXuatBanId)
+                                                if (item.Id == product.TheLoaiId)
                                                 {
                                                     <option selected value="@item.Id">@item.Ten</option>
                                                 }
@@ -114,7 +114,7 @@
                             <div class="product-id">ID: <span>@product.Id</span></div>
 
                             <div class="form-group">
-                                <InputTextArea @bind-Value="product.Mota" class="form-textarea" placeholder="Mô tả món ăn" />
+                                <InputTextArea @bind-Value="product.Mota" class="form-textarea" placeholder="Mô tả sản phẩm" />
                             </div>
 
                             <div class="product-meta">
@@ -130,10 +130,10 @@
                         <div class="product-name">@product.Ten</div>
                         <div class="product-id">ID: <span>@product.Id</span></div>
                         <div class="product-brand">
-                            @product.NhaXuatBan 
+                            @product.ThuongHieu 
                         </div>
                         <div class="product-category">
-                            @product.TacGia 
+                            @product.TheLoai 
                         </div>
                         <div class="product-description">
                             @product.Mota
@@ -222,10 +222,6 @@
                                         <div class="info-item">
                                             <strong>Giá:</strong>
                                             <span class="quantity">@chiTiet.Gia</span>
-                                        </div>
-                                        <div class="info-item">
-                                            <strong>Số trang sách:</strong>
-                                            <span class="quantity">@chiTiet.SoTrang</span>
                                         </div>
                                         @if (!string.IsNullOrEmpty(chiTiet.Mota))
                                         {
@@ -404,8 +400,8 @@
                         Id = product.Id,
                         Ten = product.Ten,
                         Mota = product.Mota,
-                        TacGiaId = product.TacGiaId,
-                        NhaXuatBanId = product.NhaXuatBanId,
+                        TheLoaiId = product.TheLoaiId,
+                        ThuongHieuId = product.ThuongHieuId,
                         TrangThai = product.TrangThai
                     };
                     ShowMessage("Cập nhật món ăn thành công!", true);
